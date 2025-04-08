@@ -1,5 +1,5 @@
 const Section = require('../models/section.model');
-const SubSection = require('../models/subsection.model');
+const SubSection = require('../models/subSection.model');
 const { fileUploader } = require('../utils/fileUploader');
 require('dotenv').config();
 

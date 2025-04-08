@@ -12,7 +12,7 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(400).json({
         status: false,
@@ -20,20 +20,20 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    const profile = user.additionalDetails;
+    const profile = user.additionalInfo;
 
     const updatedProfile = await Profile.findByIdAndUpdate(
       profile,
       {
         gender: gender,
-        dateofBirth: dateofBirth,
+        dateofBirth: Date(dateofBirth),
         about: about,
         phone: phone,
       },
       { new: true }
     );
 
-    await user.populate('additionalDetails');
+    await user.populate('additionalInfo');
 
     return res.status(200).json({
       status: true,
@@ -59,7 +59,7 @@ exports.getAllProfile = async (req, res) => {
       });
     }
 
-    await user.populate('additionalDetails');
+    await user.populate('additionalInfo');
 
     return res.status(200).json({
       status: true,
@@ -74,3 +74,5 @@ exports.getAllProfile = async (req, res) => {
     });
   }
 };
+
+  

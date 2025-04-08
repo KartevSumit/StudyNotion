@@ -42,7 +42,7 @@ exports.createSection = async (req, res) => {
   }
 };
 
-exports.UpdateSection = async (req, res) => {
+exports.updateSection = async (req, res) => {
   try {
     const { sectionName, sectionId } = req.body;
 
@@ -75,7 +75,7 @@ exports.UpdateSection = async (req, res) => {
   }
 };
 
-exports.DeleteSection = async (req, res) => {
+exports.deleteSection = async (req, res) => {
   try {
     const { sectionId, courseId } = req.body;
 

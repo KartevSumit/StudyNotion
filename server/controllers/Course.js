@@ -8,7 +8,15 @@ exports.createCourse = async (req, res) => {
     const userID = req.user._id;
     const { courseName, courseDescription, whatyouwilllearn, price, category } =
       req.body;
-    const thumbnail = req.file.thumbnail;
+    const thumbnail = req.files.thumbnail;
+
+    console.log(
+      courseDescription,
+      whatyouwilllearn,
+      price,
+      category,
+      thumbnail
+    );
 
     if (
       !courseName ||
@@ -24,7 +32,7 @@ exports.createCourse = async (req, res) => {
       });
     }
 
-    const categoryDetails = await Category.findOne({ category });
+    const categoryDetails = await Category.findById(category);
     if (!categoryDetails) {
       return res.status(400).json({
         status: false,
@@ -40,7 +48,7 @@ exports.createCourse = async (req, res) => {
       whatyouwilllearn: whatyouwilllearn,
       price: price,
       thumbnail: thumbnailImage.secure_url,
-      instructor: userID,
+      instructor: req.user.id,
       category: categoryDetails._id,
     });
 
@@ -52,7 +60,7 @@ exports.createCourse = async (req, res) => {
       { new: true }
     );
 
-    await category.findByIdAndUpdate(
+    await Category.findByIdAndUpdate(
       categoryDetails._id,
       {
         $push: { course: course._id },
@@ -99,6 +107,54 @@ exports.getAllCourses = async (req, res) => {
     return res.status(500).json({
       status: false,
       message: 'Error in fetching courses',
+      error: error.message,
+    });
+  }
+};
+
+exports.getCourseDetails = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+
+    if (!courseId) {
+      return res.status(400).json({
+        status: false,
+        message: 'Please provide course id',
+      });
+    }
+
+    const course = await Course.findById(courseId)
+      .populate({
+        path: 'instructor',
+        populate: {
+          path: 'additionalDetails',
+        },
+      })
+      .populate({
+        path: 'category',
+        populate: {
+          path: 'subCategories',
+        },
+      })
+      .populate('category')
+      .populate('ratingAndReviews');
+
+    if (!course) {
+      return res.status(400).json({
+        status: false,
+        message: 'Course not found',
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: 'Course fetched successfully',
+      data: course,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: 'Error in fetching course',
       error: error.message,
     });
   }

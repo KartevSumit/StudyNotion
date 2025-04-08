@@ -34,16 +34,24 @@ exports.SendOTP = async (req, res) => {
       });
     }
 
-    const otpData = await OTP.create({
-      email,
-      otp,
-    });
+    const otpData = await OTP.findOneAndUpdate(
+      { email },
+      { otp },
+      { upsert: true, new: true }
+    );
 
     // Send OTP to user's email
-    const response = await mailSender({
+    const response = await mailSender(
       email,
-      subject: 'OTP Verification',
-      text: `Your OTP is ${otp}`,
+      'OTP Verification',
+      `Your OTP is ${otp}`
+    );
+
+    return res.status(200).json({
+      status: true,
+      message: 'OTP sent successfully',
+      data: otpData,
+      response: response,
     });
   } catch (error) {
     return res.status(500).json({
@@ -54,7 +62,7 @@ exports.SendOTP = async (req, res) => {
   }
 };
 
-exports.Signup = async (req, res) => {
+exports.SignUp = async (req, res) => {
   try {
     const {
       firstName,
@@ -240,6 +248,30 @@ exports.ChangePassword = async (req, res) => {
     return res.status(500).json({
       status: false,
       message: 'Error in changing password',
+      error: error.message,
+    });
+  }
+};
+
+exports.Logout = async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(400).json({
+        status: false,
+        message: 'Token missing',
+      });
+    }
+
+    res.clearCookie('token');
+    return res.status(200).json({
+      status: true,
+      message: 'Logout successful',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: 'Error in logging out',
       error: error.message,
     });
   }

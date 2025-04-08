@@ -32,12 +32,70 @@ exports.createCategory = async (req, res) => {
 
 exports.getAllCategorys = async (req, res) => {
   try {
-    const categorys = await Category.find({}, { name: true, description: true });
+    const categorys = await Category.find(
+      {},
+      { name: true, description: true }
+    );
 
     return res.status(200).json({
       success: true,
       message: 'Categorys fetched successfully',
       data: categorys,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: 'Error in fetching categorys',
+      error: error.message,
+    });
+  }
+};
+
+exports.getCategoryPage = async (req, res) => {
+  try {
+    const { categoryId } = req.body;
+
+    if (!categoryId) {
+      return res.status(400).json({
+        status: false,
+        message: 'Please provide category id',
+      });
+    }
+
+    const category = await Category.findById(categoryId)
+      .populate('course')
+      .exec();
+
+    if (!category) {
+      return res.status(400).json({
+        status: false,
+        message: 'Category not found',
+      });
+    }
+
+    const differentCategorys = await Category.find(
+      { _id: { $ne: categoryId } },
+      { name: true, description: true }
+    )
+      .populate('course')
+      .exec();
+
+    const topSellingCourse = await Course.find(
+      { category: categoryId },
+      { courseName: true, thumbnail: true, price: true }
+    )
+      .sort({ studentsEnrolled: -1 })
+      .limit(5)
+      .exec();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Category fetched successfully',
+      data: {
+        category: category,
+        differentCategorys: differentCategorys,
+        topSellingCourse: topSellingCourse,
+      },
     });
   } catch (error) {
     return res.status(500).json({
