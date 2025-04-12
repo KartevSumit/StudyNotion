@@ -16,7 +16,8 @@ import compare from '../assets/Images/Compare_with_others.svg';
 import know from '../assets/Images/Know_your_progress.svg';
 import plan from '../assets/Images/Plan_your_lessons.svg';
 import instructor from '../assets/Images/Instructor.png';
-import Footer from '../components/Home/Footer';
+import Footer from '../components/common/Footer';
+import ExploreMore from '../components/Home/ExploreMore';
 
 function Home() {
   return (
@@ -30,14 +31,14 @@ function Home() {
             </div>
           </Link>
 
-          <div className="w-full lg:w-[55%] flex flex-col items-center my-4 gap-4 px-2">
+          <div className="w-full lg:w-[55%] flex flex-col items-center my-4 gap-4 px-2 text-center lg:text-start">
             <div className="flex gap-2">
               <h1 className="font-semibold text-3xl lg:text-4xl text-richblack-5">
                 Empower Your Future with{' '}
                 <HighLightText text={'Coding Skills'} />
               </h1>
             </div>
-            <p className="font-semibold test-lg text-center text-richblack-200">
+            <p className="font-semibold text-lg text-center text-richblack-200">
               With our online coding courses, you can learn at your own pace,
               from anywhere in the world, and get access to a wealth of
               resources, including hands-on projects, quizzes, and personalized
@@ -50,9 +51,9 @@ function Home() {
           </div>
         </div>
 
-        <div className="relative w-11/12 h-[525px]">
+        <div className="relative w-[90%] lg:w-[60%] h-auto lg:h-[515px]">
           <div
-            className="w-[55%] 
+            className="w-[55%] h-full 
             absolute inset-0
             bg-[#12D8FA]
             opacity-30
@@ -67,8 +68,8 @@ function Home() {
           />
         </div>
 
-        <div className="w-full min-h-[50%] flex flex-col items-center gap-16 my-8">
-          <div className="w-[80%] min-h-[10%] flex items-center justify-around my-16">
+        <div className="w-full min-h-[50%] flex flex-col items-center gap-16 my-0">
+          <div className="w-[90%] lg:w-[80%] min-h-[10%] flex flex-col lg:flex-row lg:items-center lg:justify-around gap-16 lg:gap-0 my-16">
             <TextBox
               heading1={'Unlock your '}
               heading2={' with our online courses.'}
@@ -82,8 +83,7 @@ function Home() {
             <CodeBlock Shadow="bg-gradient-to-br from-[#8A2BE2] via-[#FFA500] to-[#080800]" />
           </div>
 
-          <div className="w-[80%] min-h-[10%] flex items-center justify-around my-4">
-            <CodeBlock Shadow="bg-gradient-to-br from-[#1FA2FF] via-[#12D8FA] to-[#A6FFCB]" />
+          <div className="w-[90%] lg:w-[80%] min-h-[10%] flex flex-col lg:flex-row-reverse lg:items-center lg:justify-around my-4 gap-16 lg:gap-0">
             <TextBox
               heading1={'Start '}
               heading2={''}
@@ -94,13 +94,24 @@ function Home() {
               button1={'Continue Lesson'}
               button2={'Learn More'}
             />
+            <CodeBlock Shadow="bg-gradient-to-br from-[#1FA2FF] via-[#12D8FA] to-[#A6FFCB]" />
           </div>
         </div>
-      </div>
 
-      <div className="w-full min-h-screen flex flex-col bg-pure-greys-5 text-richblack-700 items-center gap-16 pb-16">
-        <div className="homepage_bg w-screen h-[333px]">
-          <div className="w-11/12 max-w-maxContent flex items-center justify-center gap-5 mx-auto">
+        <div className="w-full min-h-[50%] flex flex-col items-center gap-16 my-0">
+          <div className="w-11/12 flex flex-col items-center gap-4 mx-auto">
+            <h1 className="font-semibold text-3xl lg:text-4xl text-richblack-5 text-center">
+              Unlock the <HighLightText text={'power of coding'} />
+            </h1>
+            <p className="font-semibold text-md text-richblack-200">
+              Learn to Build Anything You Can Imagine
+            </p>
+          </div>
+          <div className="bg-pure-greys-5  w-full h-[320px] absolute bottom-0">
+            <div className="w-full h-full relative homepage_bg"></div>
+          </div>
+          <div className="w-full min-h-[80%] relative flex flex-col items-center gap-16">
+            <ExploreMore className="absolute" />
             <div className="flex gap-7">
               <Button
                 flag={true}
@@ -117,14 +128,17 @@ function Home() {
             </div>
           </div>
         </div>
-        <div className="w-full h-[15vh] flex items-center justify-center gap-56">
-          <div className="w-[30%] h-full text-4xl">
+      </div>
+
+      <div className="w-full min-h-screen flex flex-col bg-pure-greys-5 text-richblack-700 items-center gap-16 py-16">
+        <div className="w-full lg:h-[15vh] flex flex-col lg:flex-row items-center lg:justify-center lg:gap-56 gap-8">
+          <div className="w-11/12 lg:w-[30%] h-full text-4xl">
             <span className="font-semibold">
               Get the skills you need for a{' '}
             </span>
             <HighLightText text={'job that is in demand'} />
           </div>
-          <div className="w-[30%] h-full text-lg text-richblack-400 flex flex-col justify-between">
+          <div className="w-11/12 lg:w-[30%] h-full text-lg text-richblack-400 flex flex-col justify-start gap-4 lg-justify-center lg:gap-0">
             <p>
               The modern StudyNotion is the dictates its own terms. Today, to be
               a competitive specialist requires more than professional skills.
@@ -135,8 +149,8 @@ function Home() {
           </div>
         </div>
 
-        <div className="w-11/12 h-[550px] flex items-center justify-center gap-56 mb-16">
-          <div className="w-[25%] flex flex-col gap-4 relative">
+        <div className="w-11/12 lg:h-[550px] flex flex-col lg:flex-row items-center lg:justify-center lg:gap-56 gap-16 mb-16">
+          <div className="lg:w-[25%] flex flex-col gap-4 relative">
             <RoadMap
               image={Logo1}
               heading={'Leadership'}
@@ -161,12 +175,16 @@ function Home() {
               description={'Code your way to a solution'}
             />
           </div>
-          <div className="w-auto flex items-center justify-center relative">
-            <div className="w-full h-[60%]  "></div>
-            <img src={timeLineImage} alt="" />
-            <div className="w-[80%] h-[128px] bg-caribbeangreen-700 absolute left-1/2 -translate-x-1/2 top-[538px] -translate-y-1/2 flex items-center justify-center">
-              <div className="w-[50%] h-[40%] border-dotted border-r-2 border-caribbeangreen-500 flex justify-center">
-                <div className="w-[60%] h-full flex justify-between items-center">
+          <div className="h-[545px] flex items-center justify-center relative">
+            <div className="w-full h-[60%] bg-gradient-to-br from-[#9CECFB] via-[#65C7F7] to-[#0052D4] blur-2xl absolute z-0"></div>
+            <img
+              src={timeLineImage}
+              alt=""
+              className="z-10 h-full object-cover"
+            />
+            <div className="w-[75%] lg:w-[80%] lg:h-[128px] bg-caribbeangreen-700 absolute right-4 bottom-4 lg:left-1/2 lg:-translate-x-1/2 lg:top-[538px] lg:-translate-y-1/2 flex flex-col lg:flex-row items-center justify-center z-20 p-8 lg:p-0">
+              <div className="w-full lg:w-[50%] h-[40%] border-dotted lg:border-r-2 border-caribbeangreen-500 flex justify-center p-4 py-8 lg:py-0 lg:p-0">
+                <div className="lg:w-[60%] h-full flex justify-between items-center ">
                   <h1 className="w-[30%] text-4xl font-bold text-richblack-5">
                     10
                   </h1>
@@ -175,8 +193,8 @@ function Home() {
                   </p>
                 </div>
               </div>
-              <div className="w-[50%] h-[40%] flex justify-center">
-                <div className="w-[60%] h-full flex justify-between items-center">
+              <div className="w-full lg:w-[50%] h-[40%] flex justify-center p-4 py-8 lg:py-0 lg:p-0">
+                <div className="lg:w-[60%] h-full flex justify-between items-center gap-4">
                   <h1 className="w-[35%] text-4xl font-bold text-richblack-5">
                     250
                   </h1>
@@ -191,11 +209,13 @@ function Home() {
 
         <div className="w-11/12 flex flex-col items-center gap-8">
           <div className="w-full flex flex-col items-center gap-8">
-            <div className="w-[45%] text-4xl flex justify-center gap-2">
-              <span className="font-semibold ">Your swiss knife for </span>
-              <HighLightText text={'learning any language'} />
+            <div className="lg:w-[45%] text-4xl flex justify-center gap-2 lg:text-start text-center">
+              <span className="font-semibold ">
+                Your swiss knife for
+                <HighLightText text={' learning any language'} />
+              </span>
             </div>
-            <div className="w-[45%] text-lg flex justify-center gap-2 text-center">
+            <div className="lg:w-[45%] text-lg flex justify-center gap-2 text-center">
               <p>
                 Using spin making learning multiple languages easy. with 20+
                 languages realistic voice-over, progress tracking, custom
@@ -203,12 +223,12 @@ function Home() {
               </p>
             </div>
           </div>
-          <div className="w-full h-[60vh] flex items-center justify-center relative gap-64">
+          <div className="w-full lG:h-[60vh] flex flex-col lg:flex-row items-center justify-center relative lg:gap-64">
             <img src={know} alt="" className="z-0" />
             <img
               src={compare}
               alt=""
-              className="z-10 absolute left-1/2 -translate-x-64"
+              className="z-10 lg:absolute lg:left-1/2 lg:-translate-x-64"
             />
             <img src={plan} alt="" className="z-20" />
           </div>
@@ -217,16 +237,15 @@ function Home() {
       </div>
 
       <div className="w-full min-h-screen flex flex-col items-center justify-center gap-24 pt-32">
-        <div className="w-11/12 h-[65vh] flex items-center justify-center gap-36">
-          <div className="relative h-full">
-            <div className="absolute inset-0 -translate-x-4 -translate-y-4 bg-white z-0"></div>
+        <div className="w-11/12 lg:h-[65vh] flex flex-col lg:flex-row items-center justify-center gap-16 lg:gap-36">
+          <div className="relative h-full before:absolute before:inset-0 before:-translate-x-4 before:-translate-y-4 before:bg-white before:z-0">
             <img
               src={instructor}
               alt=""
               className="relative z-10 h-full w-full object-cover"
             />
           </div>
-          <div className="w-[28%] flex flex-col gap-16 justify-center">
+          <div className="lg:w-[28%] flex flex-col gap-16 justify-center">
             <div className="flex flex-col gap-4">
               <div className="text-4xl text-richblack-5 font-semibold">
                 <h1>Become an</h1>

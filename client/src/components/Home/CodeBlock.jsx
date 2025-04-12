@@ -51,7 +51,10 @@ function buildFullTextWithSegments() {
   });
 }
 
-export default function CodeBlock({ Shadow }) {
+export default function CodeBlock({
+  Shadow,
+  cursorAnimationClass = 'animate-pulse',
+}) {
   const [displayedText, setDisplayedText] = useState([]);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const [currentSegmentIndex, setCurrentSegmentIndex] = useState(0);
@@ -123,12 +126,7 @@ export default function CodeBlock({ Shadow }) {
       clearInterval(typingInterval);
       clearInterval(cursorInterval);
     };
-  }, [
-    currentLineIndex,
-    currentSegmentIndex,
-    currentCharIndex,
-    fullTextWithSegments,
-  ]);
+  }, [currentLineIndex, currentSegmentIndex, currentCharIndex]);
 
   const renderCode = () => {
     return displayedText.map((line, lineIndex) => {
@@ -151,19 +149,23 @@ export default function CodeBlock({ Shadow }) {
           ) : (
             <span>&nbsp;</span>
           )}
-          {lineIndex === currentLineIndex && showCursor && (
-            <span className="animate-pulse">|</span>
-          )}
+          {lineIndex === currentLineIndex &&
+            showCursor &&
+            currentLineIndex < displayedText.length && (
+              <span className={cursorAnimationClass}>|</span>
+            )}
         </div>
       );
     });
   };
 
   return (
-    <div className="relative w-[37%] flex py-4">
+    <div className="relative lg:w-[37%] flex py-4 px-2 lg:px-0 ">
       <div
         className={`w-[350px] h-[300px] rounded-full absolute z-0 opacity-30 -top-5 -left-5 blur-2xl ${Shadow}`}
       />
+
+      <div className="w-full h-full bg-richblack-800 border-richblack-400 absolute z-10 bottom-0 opacity-50 right-0 border-2" />
 
       {/* Line numbers */}
       <div className="w-[8%] flex flex-col font-semibold text-richblack-200 items-center z-20 pt-[2px]">
@@ -174,11 +176,9 @@ export default function CodeBlock({ Shadow }) {
         ))}
       </div>
 
-      <div className="text-richblack-5 font-semibold font-mono z-20 flex-1">
+      <div className="w-max overflow-x-auto text-richblack-5 font-semibold z-20 flex-1 whitespace-nowrap">
         {renderCode()}
       </div>
-
-      <div className="w-full h-full bg-richblack-800 border-richblack-400 absolute z-10 bottom-0 opacity-50 border-2" />
     </div>
   );
 }
