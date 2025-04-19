@@ -46,7 +46,7 @@ router.post('/createCategory', auth, isAdmin, createCategory);
 router.post('/createRatingAndReview', auth, isStudent, createRatingAndReview);
 
 // get routes
-router.get('/getAllCategorys', getAllCategorys);
+router.get('/getAllCategories', getAllCategorys);
 router.get('/getCategoryPage', getCategoryPage);
 router.get('/getAllCourses', getAllCourses);
 router.get('/getCourseDetails', getCourseDetails);

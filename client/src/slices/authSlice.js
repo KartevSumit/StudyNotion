@@ -1,18 +1,35 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    token: localStorage.getItem("token") ? JSON.parse(localStorage.setItem("token")): null,
-}
+  signupData: null,
+  loading: false,
+  token: localStorage.getItem('token') || null,
+  email: null,
+  emailSent: false,
+};
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState: initialState,
-    reducers: {
-        setToken(state ,value){
-            state.token = value.payload;
-        }
-    }
-})
+  name: 'auth',
+  initialState: initialState,
+  reducers: {
+    setSignupData(state, action) {
+      state.signupData = action.payload;
+    },
+    setLoading(state, action) {
+      state.loading = action.payload;
+    },
+    setToken(state, value) {
+      state.token = value.payload;
+    },
+    setEmail(state, action) {
+      state.email = action.payload;
+    },
+    setEmailSent(state, action) {
+      state.emailSent = action.payload;
+    },
+  },
+});
 
-export const { setToken } = authSlice.actions;
+export const { setToken, setLoading, setSignupData, setEmail, setEmailSent } =
+  authSlice.actions;
 export default authSlice.reducer;

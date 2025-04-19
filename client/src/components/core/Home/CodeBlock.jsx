@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 const codeLines = [
   { segments: [{ text: '<!DOCTYPE html>', yellow: true }] },
@@ -40,17 +40,6 @@ const codeLines = [
   { segments: [{ text: '</nav>' }] },
 ];
 
-// Build the full text with segments properly marked
-function buildFullTextWithSegments() {
-  return codeLines.map((line) => {
-    return line.segments.map((segment) => ({
-      text: segment.text,
-      yellow: segment.yellow,
-      highlighted: segment.highlighted,
-    }));
-  });
-}
-
 export default function CodeBlock({
   Shadow,
   cursorAnimationClass = 'animate-pulse',
@@ -61,7 +50,15 @@ export default function CodeBlock({
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
 
-  const fullTextWithSegments = buildFullTextWithSegments();
+  const fullTextWithSegments = useMemo(() => {
+    return codeLines.map((line) =>
+      line.segments.map((segment) => ({
+        text: segment.text,
+        yellow: segment.yellow,
+        highlighted: segment.highlighted,
+      }))
+    );
+  }, []); // 👈 no deps, memoized once
 
   useEffect(() => {
     setDisplayedText(codeLines.map(() => []));
@@ -100,7 +97,6 @@ export default function CodeBlock({
       setDisplayedText((prev) => {
         const newText = [...prev];
 
-        // Ensure the segment exists
         if (!newText[currentLineIndex][currentSegmentIndex]) {
           newText[currentLineIndex][currentSegmentIndex] = {
             text: '',
@@ -126,7 +122,7 @@ export default function CodeBlock({
       clearInterval(typingInterval);
       clearInterval(cursorInterval);
     };
-  }, [currentLineIndex, currentSegmentIndex, currentCharIndex]);
+  }, [currentLineIndex, currentSegmentIndex, currentCharIndex, fullTextWithSegments]);
 
   const renderCode = () => {
     return displayedText.map((line, lineIndex) => {
@@ -160,7 +156,7 @@ export default function CodeBlock({
   };
 
   return (
-    <div className="relative lg:w-[37%] flex py-4 px-2 lg:px-0 ">
+    <div className="relative flex py-4 px-2 lg:px-0">
       <div
         className={`w-[350px] h-[300px] rounded-full absolute z-0 opacity-30 -top-5 -left-5 blur-2xl ${Shadow}`}
       />

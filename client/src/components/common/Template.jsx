@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import frame from '../../assets/Images/frame.png';
 import auth from '../../assets/Images/AuthInstructor.png';
+import { cloneElement } from 'react';
 
 function Template({ heading, content1, content2, Form, photo }) {
   const [Role, setRole] = useState('Student');
@@ -48,7 +49,7 @@ function Template({ heading, content1, content2, Form, photo }) {
             </button>
           </div>
 
-          {Form}
+          {Form && cloneElement(Form, { role: Role })}
         </div>
         <div className="relative w-[558px] h-[504px]">
           <img

@@ -148,9 +148,9 @@ exports.SignUp = async (req, res) => {
 
 exports.Login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
-    if (!email || !password) {
+    if (!email || !password || !role) {
       return res.status(400).json({
         status: false,
         message: 'All fields are required',
@@ -169,6 +169,13 @@ exports.Login = async (req, res) => {
       id: user._id,
       accountType: user.accountType,
     };
+
+    if (role !== user.accountType) {
+      return res.status(403).json({
+        status: false,
+        message: 'Unauthorized role',
+      });
+    }
     if (await bcrypt.compare(password, user.password)) {
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: '1d',

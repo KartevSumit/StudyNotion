@@ -1,5 +1,5 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
-import { HomePageExplore } from '../../data/homepage-explore';
+import { HomePageExplore } from '../../../data/homepage-explore';
 import ExploreCard from './ExploreCard';
 
 const TABS = [

@@ -1,27 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import HighLightText from '../components/Home/HighLightText';
+import HighLightText from '../components/core/Home/HighLightText';
 import boxoffice from '../assets/Images/boxoffice.png';
-import Button from '../components/Home/Button';
-import TextBox from '../components/Home/TextBox';
-import CodeBlock from '../components/Home/CodeBlock';
+import Button from '../components/core/Home/Button';
+import TextBox from '../components/core/Home/TextBox';
+import CodeBlock from '../components/core/Home/CodeBlock';
 import Logo1 from '../assets/TimeLineLogo/Logo1.svg';
 import Logo2 from '../assets/TimeLineLogo/Logo2.svg';
 import Logo3 from '../assets/TimeLineLogo/Logo3.svg';
 import Logo4 from '../assets/TimeLineLogo/Logo4.svg';
-import RoadMap from '../components/Home/RoadMap';
+import RoadMap from '../components/core/Home/RoadMap';
 import timeLineImage from '../assets/Images/TimelineImage.png';
 import compare from '../assets/Images/Compare_with_others.svg';
 import know from '../assets/Images/Know_your_progress.svg';
 import plan from '../assets/Images/Plan_your_lessons.svg';
 import instructor from '../assets/Images/Instructor.png';
 import Footer from '../components/common/Footer';
-import ExploreMore from '../components/Home/ExploreMore';
+import ExploreMore from '../components/core/Home/ExploreMore';
+import Tilt from 'react-parallax-tilt';
+import Spinner from '../components/common/Spinner';
+import { useSelector } from 'react-redux';
 
 function Home() {
+  const {loader} = useSelector((state) => state.auth);
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center">
+    loader? (<Spinner/>) :(<div className="w-full min-h-screen flex flex-col justify-center">
       <div className="w-full min-h-screen relative py-16 flex flex-col items-center gap-16">
         <div className="w-11/12 flex flex-col items-center gap-4 mx-auto">
           <Link to={'/signup'}>
@@ -80,7 +84,10 @@ function Home() {
               button1={'Try it Yourself'}
               button2={'Learn More'}
             />
-            <CodeBlock Shadow="bg-gradient-to-br from-[#8A2BE2] via-[#FFA500] to-[#080800]" />
+
+            <Tilt className="lg:w-[37%]">
+              <CodeBlock Shadow="bg-gradient-to-br from-[#8A2BE2] via-[#FFA500] to-[#080800]" />
+            </Tilt>
           </div>
 
           <div className="w-[90%] lg:w-[80%] min-h-[10%] flex flex-col lg:flex-row-reverse lg:items-center lg:justify-around my-4 gap-16 lg:gap-0">
@@ -94,7 +101,10 @@ function Home() {
               button1={'Continue Lesson'}
               button2={'Learn More'}
             />
-            <CodeBlock Shadow="bg-gradient-to-br from-[#1FA2FF] via-[#12D8FA] to-[#A6FFCB]" />
+
+            <Tilt className="lg:w-[37%]">
+              <CodeBlock Shadow="bg-gradient-to-br from-[#1FA2FF] via-[#12D8FA] to-[#A6FFCB]" />
+            </Tilt>
           </div>
         </div>
 
@@ -282,7 +292,7 @@ function Home() {
           <Footer />
         </footer>
       </div>
-    </div>
+    </div>)
   );
 }
 

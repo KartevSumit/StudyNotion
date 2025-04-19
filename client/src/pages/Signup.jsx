@@ -1,10 +1,15 @@
 import React from 'react';
 import signup from '../assets/Images/signup.webp';
 import Template from '../components/common/Template';
-import SignUpForm from '../components/SignUp/SignUpForm';
+import SignUpForm from '../components/core/Forms/SignUpForm';
+import { useSelector } from 'react-redux';
+import Spinner from '../components/common/Spinner';
 
 function Signup() {
-  return (
+  const { loader } = useSelector((state) => state.auth);
+  return loader ? (
+    <Spinner />
+  ) : (
     <div>
       <Template
         heading={'Join the millions learning to code with StudyNotion for free'}
