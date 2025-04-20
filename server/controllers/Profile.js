@@ -7,7 +7,7 @@ exports.updateProfile = async (req, res) => {
 
     if (!gender || !dateofBirth || !about || !phone) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -15,7 +15,7 @@ exports.updateProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
@@ -36,13 +36,13 @@ exports.updateProfile = async (req, res) => {
     await user.populate('additionalInfo');
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'Profile updated successfully',
       data: user,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in updating profile',
       error: error.message,
     });
@@ -54,7 +54,7 @@ exports.getAllProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
@@ -62,17 +62,15 @@ exports.getAllProfile = async (req, res) => {
     await user.populate('additionalInfo');
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'Profile fetched successfully',
       data: user,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in fetching profile',
       error: error.message,
     });
   }
 };
-
-  

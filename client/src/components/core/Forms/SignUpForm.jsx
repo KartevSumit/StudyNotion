@@ -2,6 +2,10 @@ import { React, useState } from 'react';
 import countryCodes from '../../../data/countrycode.json';
 import { BiHide } from 'react-icons/bi';
 import { BiShow } from 'react-icons/bi';
+import { useDispatch } from 'react-redux';
+import { sendOtp } from '../../../services/operations/AuthApi';
+import { useNavigate } from 'react-router-dom';
+import { setSignupData } from '../../../slices/authSlice';
 
 function SignUpForm({ role }) {
   const [formData, setFormData] = useState({
@@ -15,6 +19,8 @@ function SignUpForm({ role }) {
     accountType: role,
   });
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -36,8 +42,17 @@ function SignUpForm({ role }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    dispatch(setSignupData(formData));
+    dispatch(sendOtp(formData.email, navigate));
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
+      countryCode: '+91',
+      password: '',
+      confirmPassword: '',
+    });
   };
 
   return (
@@ -93,7 +108,6 @@ function SignUpForm({ role }) {
             spellCheck="false"
             autoCapitalize="none"
             autoCorrect="off"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           />
         </label>
         <label className="text-richblack-5 flex flex-col gap-2">
@@ -110,7 +124,7 @@ function SignUpForm({ role }) {
             >
               {countryCodes.map((code) => (
                 <option
-                  key={code.code}
+                  key={code.country}
                   value={code.code}
                   className="text-richblack-200 w-16"
                 >

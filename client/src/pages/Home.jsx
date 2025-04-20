@@ -23,9 +23,9 @@ import Spinner from '../components/common/Spinner';
 import { useSelector } from 'react-redux';
 
 function Home() {
-  const {loader} = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
   return (
-    loader? (<Spinner/>) :(<div className="w-full min-h-screen flex flex-col justify-center">
+    loading ? (<Spinner/>) :(<div className="w-full min-h-screen flex flex-col justify-center">
       <div className="w-full min-h-screen relative py-16 flex flex-col items-center gap-16">
         <div className="w-11/12 flex flex-col items-center gap-4 mx-auto">
           <Link to={'/signup'}>

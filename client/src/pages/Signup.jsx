@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import Spinner from '../components/common/Spinner';
 
 function Signup() {
-  const { loader } = useSelector((state) => state.auth);
-  return loader ? (
+  const { loading } = useSelector((state) => state.auth);
+  return loading ? (
     <Spinner />
   ) : (
     <div>

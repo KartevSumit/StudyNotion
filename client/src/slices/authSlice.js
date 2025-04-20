@@ -18,8 +18,8 @@ const authSlice = createSlice({
     setLoading(state, action) {
       state.loading = action.payload;
     },
-    setToken(state, value) {
-      state.token = value.payload;
+    setToken(state, action) {
+      state.token = action.payload;
     },
     setEmail(state, action) {
       state.email = action.payload;

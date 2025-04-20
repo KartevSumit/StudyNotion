@@ -4,12 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { setEmail } from '../slices/authSlice';
+import Spinner from '../components/common/Spinner';
 
 function SuccessChange() {
   const dispatch = useDispatch();
   const email = useSelector((state) => state.auth.email);
   const navigate = useNavigate();
-  return (
+  const { loading } = useSelector((state) => state.auth);
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <AuthTemplate
       heading={'Reset complete!'}
       subheading={`All done! We have sent an email to ${email} to confirm`}

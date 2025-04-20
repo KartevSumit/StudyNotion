@@ -11,7 +11,7 @@ exports.capturePayment = async (req, res) => {
 
     if (!courseId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Please provide course id',
       });
     }
@@ -21,7 +21,7 @@ exports.capturePayment = async (req, res) => {
 
       if (!course) {
         return res.status(400).json({
-          status: false,
+          success: false,
           message: 'Course not found',
         });
       }
@@ -30,13 +30,13 @@ exports.capturePayment = async (req, res) => {
 
       if (course.studentsEnrolled.includes(uid)) {
         return res.status(400).json({
-          status: false,
+          success: false,
           message: 'You are already enrolled in this course',
         });
       }
     } catch (error) {
       return res.status(500).json({
-        status: false,
+        success: false,
         message: 'Error in fetching course',
         error: error.message,
       });
@@ -58,7 +58,7 @@ exports.capturePayment = async (req, res) => {
       const response = await instance.orders.create(options);
 
       return res.status(200).json({
-        status: true,
+        success: true,
         message: 'Payment order created successfully',
         courseName: course.courseName,
         courseDescription: course.courseDescription,
@@ -69,14 +69,14 @@ exports.capturePayment = async (req, res) => {
       });
     } catch (error) {
       return res.status(500).json({
-        status: false,
+        success: false,
         message: 'Error in creating payment order',
         error: error.message,
       });
     }
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in capturing payment',
       error: error.message,
     });
@@ -97,7 +97,7 @@ const verifySignature = async (req, res) => {
 
     if (signature !== digest) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Invalid signature',
       });
     }

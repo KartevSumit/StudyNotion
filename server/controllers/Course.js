@@ -27,7 +27,7 @@ exports.createCourse = async (req, res) => {
       !thumbnail
     ) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -35,7 +35,7 @@ exports.createCourse = async (req, res) => {
     const categoryDetails = await Category.findById(category);
     if (!categoryDetails) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'category not found',
       });
     }
@@ -75,7 +75,7 @@ exports.createCourse = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in creating course',
       error: error.message,
     });
@@ -105,7 +105,7 @@ exports.getAllCourses = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in fetching courses',
       error: error.message,
     });
@@ -118,7 +118,7 @@ exports.getCourseDetails = async (req, res) => {
 
     if (!courseId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Please provide course id',
       });
     }
@@ -141,19 +141,19 @@ exports.getCourseDetails = async (req, res) => {
 
     if (!course) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Course not found',
       });
     }
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'Course fetched successfully',
       data: course,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in fetching course',
       error: error.message,
     });

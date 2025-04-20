@@ -15,7 +15,7 @@ exports.SendOTP = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User already exists',
       });
     }
@@ -40,7 +40,6 @@ exports.SendOTP = async (req, res) => {
       { upsert: true, new: true }
     );
 
-    // Send OTP to user's email
     const response = await mailSender(
       email,
       'OTP Verification',
@@ -48,14 +47,14 @@ exports.SendOTP = async (req, res) => {
     );
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'OTP sent successfully',
       data: otpData,
       response: response,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in sending OTP',
       error: error.message,
     });
@@ -77,7 +76,7 @@ exports.SignUp = async (req, res) => {
 
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -85,14 +84,14 @@ exports.SignUp = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User already exists',
       });
     }
 
     if (password !== confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Passwords do not match',
       });
     }
@@ -102,13 +101,13 @@ exports.SignUp = async (req, res) => {
       .limit(1);
     if (!otpData) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'OTP not found',
       });
     }
     if (otpData.otp !== otp) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Invalid OTP',
       });
     }
@@ -132,14 +131,26 @@ exports.SignUp = async (req, res) => {
       image: `https://api.dicebear.com/9.x/initials/svg?seed=${firstName} ${lastName}`,
     });
 
+    const payload = {
+      email: newUser.email,
+      id: newUser._id,
+      accountType: newUser.accountType,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '1d',
+    });
+    newUser.token = token;
+    newUser.password = undefined;
+
     return res.status(201).json({
-      status: true,
+      success: true,
       message: 'User created successfully',
       data: newUser,
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Internal server error',
       error: error.message,
     });
@@ -152,7 +163,7 @@ exports.Login = async (req, res) => {
 
     if (!email || !password || !role) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -160,7 +171,7 @@ exports.Login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
@@ -172,7 +183,7 @@ exports.Login = async (req, res) => {
 
     if (role !== user.accountType) {
       return res.status(403).json({
-        status: false,
+        success: false,
         message: 'Unauthorized role',
       });
     }
@@ -190,19 +201,19 @@ exports.Login = async (req, res) => {
 
       res.cookie('token', token, options);
       return res.status(200).json({
-        status: true,
+        success: true,
         message: 'Login successful',
         data: user,
       });
     } else {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Invalid credentials',
       });
     }
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in logging in',
       error: error.message,
     });
@@ -215,7 +226,7 @@ exports.ChangePassword = async (req, res) => {
 
     if (!email || !oldPassword || !newPassword || !confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -223,14 +234,14 @@ exports.ChangePassword = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
 
     if (newPassword !== confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Passwords do not match',
       });
     }
@@ -247,13 +258,13 @@ exports.ChangePassword = async (req, res) => {
       });
 
       return res.status(200).json({
-        status: true,
+        success: true,
         message: 'Password changed successfully',
       });
     }
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in changing password',
       error: error.message,
     });
@@ -262,22 +273,25 @@ exports.ChangePassword = async (req, res) => {
 
 exports.Logout = async (req, res) => {
   try {
-    const token = req.cookies.token;
+    const token =
+      req.cookies.token ||
+      req.body.token ||
+      req.headers('Authorisation').reaplace('Bearer ', '');
     if (!token) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Token missing',
       });
     }
 
     res.clearCookie('token');
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'Logout successful',
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in logging out',
       error: error.message,
     });

@@ -7,9 +7,9 @@ import Spinner from '../components/common/Spinner';
 function UpdatePassword() {
   const heading = 'Update Password';
   const subheading = "Almost done. Enter your new password and you're all set.";
-  const { loader } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
-  return loader ? (
+  return loading ? (
     <Spinner />
   ) : (
     <AuthTemplate

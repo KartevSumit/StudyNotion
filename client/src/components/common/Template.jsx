@@ -23,9 +23,9 @@ function Template({ heading, content1, content2, Form, photo }) {
           <div>
             <p className="text-richblack-100 text-xl">
               {content}
-              <p className="text-blue-100 font-edu-sa text-xl">
+              <span className="text-blue-100 font-edu-sa text-xl">
                 {content2text}
-              </p>
+              </span>
             </p>
           </div>
           <div className="w-[50%] h-12 flex items-center justify-around rounded-full bg-richblack-800 text-lg text-richblack-200  border-richblack-800 border-2">

@@ -6,7 +6,7 @@ exports.createCategory = async (req, res) => {
 
     if (!name || !description) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -23,7 +23,7 @@ exports.createCategory = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in creating category',
       error: error.message,
     });
@@ -44,7 +44,7 @@ exports.getAllCategorys = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in fetching categorys',
       error: error.message,
     });
@@ -57,7 +57,7 @@ exports.getCategoryPage = async (req, res) => {
 
     if (!categoryId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Please provide category id',
       });
     }
@@ -68,7 +68,7 @@ exports.getCategoryPage = async (req, res) => {
 
     if (!category) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Category not found',
       });
     }
@@ -99,7 +99,7 @@ exports.getCategoryPage = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in fetching categorys',
       error: error.message,
     });

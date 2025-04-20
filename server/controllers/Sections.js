@@ -7,7 +7,7 @@ exports.createSection = async (req, res) => {
 
     if (!sectionName || !courseId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -35,7 +35,7 @@ exports.createSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in creating section',
       error: error.message,
     });
@@ -48,7 +48,7 @@ exports.updateSection = async (req, res) => {
 
     if (!sectionName || !sectionId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -68,7 +68,7 @@ exports.updateSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in updating section',
       error: error.message,
     });
@@ -81,7 +81,7 @@ exports.deleteSection = async (req, res) => {
 
     if (!sectionId || !courseId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
@@ -104,7 +104,7 @@ exports.deleteSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in deleting section',
       error: error.message,
     });

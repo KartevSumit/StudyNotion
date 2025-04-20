@@ -8,7 +8,7 @@ exports.resetPasswordToken = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
@@ -35,7 +35,7 @@ exports.resetPasswordToken = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in password reset',
       error: error.message,
     });
@@ -48,14 +48,14 @@ exports.resetPassword = async (req, res) => {
 
     if (!token || !password || !confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
 
     if (password !== confirmPassword) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Passwords do not match',
       });
     }
@@ -64,14 +64,14 @@ exports.resetPassword = async (req, res) => {
 
     if (!user) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'User not found',
       });
     }
 
     if (Date.now() > user.resetPasswordExpires) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'Token expired',
       });
     }
@@ -85,12 +85,12 @@ exports.resetPassword = async (req, res) => {
     await user.save();
 
     return res.status(200).json({
-      status: true,
+      success: true,
       message: 'Password reset successfully',
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in password reset',
       error: error.message,
     });

@@ -1,16 +1,22 @@
 import { React, useState } from 'react';
 import OtpInput from 'react-otp-input';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { signupUser } from '../../../services/operations/AuthApi';
 
 function VerifyEmailForm() {
   const [otp, setOtp] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    dispatch(signupUser(otp, navigate));
+    setOtp('');
   };
 
   return (
-    <form className="w-full flex flex-col gap-4 ">
+    <form className="w-full flex flex-col gap-4 " onSubmit={handleSubmit}>
       <OtpInput
         value={otp}
         onChange={setOtp}
@@ -31,7 +37,6 @@ function VerifyEmailForm() {
           outline: 'none',
           boxSizing: 'border-box',
         }}
-
         containerStyle={{
           display: 'flex',
           justifyContent: 'space-between',

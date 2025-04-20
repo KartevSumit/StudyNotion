@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import logo from '../../assets/Logo/Logo-Full-Light.png';
 import { NavbarLinks } from '../../data/navbar-links';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaCartShopping } from 'react-icons/fa6';
 //import ProfileDropDown from '../core/Auth/ProfileDropDown';
@@ -11,6 +11,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import Tilt from 'react-parallax-tilt';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../slices/authSlice';
+import { logoutUser } from '../../services/operations/AuthApi';
 
 export default function NavBar() {
   const { token } = useSelector((s) => s.auth);
@@ -41,6 +42,7 @@ export default function NavBar() {
   }, []);
 
   const location = useLocation();
+  const navigate = useNavigate();
   const matchRoute = (path) => location.pathname === path;
 
   const handleMotion = (e, idx) => {
@@ -67,11 +69,19 @@ export default function NavBar() {
     setHovered(false);
   };
 
+  const logoutHandler = async () => {
+    try {
+      dispatch(logoutUser(navigate));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="w-full h-16 flex items-center justify-around border-b-2 border-richblack-700 font-semibold text-lg">
-      <div>
+      <Link to={'/'}>
         <img src={logo} alt="Logo" />
-      </div>
+      </Link>
 
       <div className="flex gap-4 h-full items-center">
         {NavbarLinks.map((link) =>
@@ -144,9 +154,9 @@ export default function NavBar() {
         )}
       </div>
 
-      <div className="flex gap-4">
+      <div className="h-full flex gap-4 items-center">
         {user?.accountType === 'Student' && (
-          <Link to="/dashboard/cart" className="relative">
+          <Link to="/dashboard/cart" className="relative p-2">
             <FaCartShopping className="text-2xl text-richblack-5" />
             {totalItems > 0 && (
               <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
@@ -170,8 +180,8 @@ export default function NavBar() {
           </>
         ) : (
           <>
-            <Link to="/dashboard/profile">
-              <button className="w-9 h-9 rounded-full overflow-hidden">
+            <Link to="/dashboard/profile" className="m-auto w-10 h-10">
+              <button className="w-10 h-10 rounded-full overflow-hidden m-auto">
                 <img
                   src={user?.image}
                   alt="Profile"
@@ -179,6 +189,9 @@ export default function NavBar() {
                 />
               </button>
             </Link>
+            <button onClick={logoutHandler}>
+              <h1 className="text-richblack-5 p-2">Logout</h1>
+            </button>
           </>
         )}
       </div>

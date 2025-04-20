@@ -42,7 +42,7 @@ exports.createSubSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in creating subsection',
       error: error.message,
     });
@@ -52,18 +52,20 @@ exports.createSubSection = async (req, res) => {
 exports.updateSubSection = async (req, res) => {
   try {
     const { subsectionId, title, timeDuration, description } = req.body;
-    const video = req.file.video;
+    const video = req.files?.video;
 
     if (!subsectionId || !title || !timeDuration || !description) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
 
+    let updatedSubSection;
+
     if (video) {
       const response = await fileUploader(video, process.env.FOLDER);
-      const updatedSubSection = await SubSection.findByIdAndUpdate(
+      updatedSubSection = await SubSection.findByIdAndUpdate(
         subsectionId,
         {
           title: title,
@@ -74,7 +76,7 @@ exports.updateSubSection = async (req, res) => {
         { new: true }
       );
     } else {
-      const updatedSubSection = await SubSection.findByIdAndUpdate(
+      updatedSubSection = await SubSection.findByIdAndUpdate(
         subsectionId,
         {
           title: title,
@@ -92,7 +94,7 @@ exports.updateSubSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in updating subsection',
       error: error.message,
     });
@@ -101,14 +103,23 @@ exports.updateSubSection = async (req, res) => {
 
 exports.deleteSubSection = async (req, res) => {
   try {
-    const { subsectionId } = req.body;
+    const { subsectionId, sectionId } = req.body;
 
-    if (!subsectionId) {
+    if (!subsectionId || !sectionId) {
       return res.status(400).json({
-        status: false,
+        success: false,
         message: 'All fields are required',
       });
     }
+
+    // Remove subsection from section
+    const updatedSection = await Section.findByIdAndUpdate(
+      sectionId,
+      {
+        $pull: { subSections: subsectionId },
+      },
+      { new: true }
+    );
 
     const deletedSubSection = await SubSection.findByIdAndDelete(subsectionId);
 
@@ -119,7 +130,7 @@ exports.deleteSubSection = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      status: false,
+      success: false,
       message: 'Error in deleting subsection',
       error: error.message,
     });
