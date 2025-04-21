@@ -14,7 +14,6 @@ function ExploreMore() {
   const [Category, setCategory] = useState('Free');
   const tabIndex = TABS.indexOf(Category);
 
-  // Measure the active button for sliding highlight
   const containerRef = useRef(null);
   const [highlightStyle, setHighlightStyle] = useState({ width: 0, left: 0 });
 
@@ -29,7 +28,6 @@ function ExploreMore() {
 
   return (
     <div className="w-11/12 min-h-[60%] flex flex-col items-center justify-center gap-12 ">
-      {/* Mobile Dropdown */}
       <div className="block lg:hidden w-[256px] mb-4">
         <select
           value={Category}
@@ -44,7 +42,6 @@ function ExploreMore() {
         </select>
       </div>
 
-      {/* Desktop Tabs */}
       <div
         ref={containerRef}
         className="relative hidden lg:flex bg-richblack-800 rounded-full py-2 border-richblack-700 border-2 flex-wrap"
@@ -68,7 +65,6 @@ function ExploreMore() {
         ))}
       </div>
 
-      {/* Slider */}
       <div className="relative w-full overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-in-out"

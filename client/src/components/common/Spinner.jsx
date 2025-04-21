@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Spinner = () => {
   return (
-    <div className="w-screen h-[92vh] flex justify-center items-center bg-[#050e17]">
+    <div className="w-screen h-[100vh] flex justify-center items-center bg-[#050e17]">
       <StyledWrapper>
         <svg xmlns="http://www.w3.org/2000/svg" height={200} width={200}>
           <g style={{ order: -1 }}>

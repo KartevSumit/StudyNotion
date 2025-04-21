@@ -5,9 +5,7 @@ import { useSelector } from 'react-redux';
 import Spinner from '../components/common/Spinner';
 
 function ForgotPassword() {
-  const [emailSent, setEmailSent] = useState(false);
-  const [email, setEmail] = useState('');
-  const { loading } = useSelector((state) => state.auth);
+  const { loading, emailSent, email } = useSelector((state) => state.auth);
 
   const heading = emailSent ? 'Check Email' : 'Reset your password';
   const subheading = emailSent
@@ -20,14 +18,7 @@ function ForgotPassword() {
     <AuthTemplate
       heading={heading}
       subheading={subheading}
-      form={
-        <ForgotPasswordForm
-          setEmail={setEmail}
-          emailSent={emailSent}
-          email={email}
-          setEmailSent={setEmailSent}
-        />
-      }
+      form={<ForgotPasswordForm />}
       back={true}
       resend={false}
     />

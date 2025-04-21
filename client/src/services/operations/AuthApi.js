@@ -12,7 +12,7 @@ export function getPasswordResetToken() {
       const response = await apiConnector('POST', auth.RESET_PASSWORD_TOKEN, {
         email,
       });
-      console.log(response);
+
       if (response.data.success) {
         dispatch(setEmailSent(true));
         toast.success('Email sent successfully. Please check your inbox.');

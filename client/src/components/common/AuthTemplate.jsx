@@ -20,11 +20,11 @@ function AuthTemplate({ heading, subheading, form, back, resend }) {
   return (
     <div className="w-11/12 h-[92vh] flex flex-col items-center justify-center mx-auto">
       <div
-        className="w-[26%] flex flex-col items-start gap-4 p-4
+        className="w-128 lg:w-[26%] flex flex-col items-start gap-4 p-4
       "
       >
         <h1 className="text-4xl font-semibold text-richblack-5">{heading}</h1>
-        <p className="text-lg text-richblack-200 mt-2">{subheading}</p>
+        <p className="text-lg text-richblack-200 mt-2 ">{subheading}</p>
         {form}
         <div className="flex items-center justify-between w-full">
           {back && (

@@ -16,17 +16,22 @@ import { setUser } from './slices/profileSlice';
 
 function App() {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-
-    if (token) dispatch(setToken(token));
-    if (user) dispatch(setUser(JSON.parse(user)));
+    if (token) {
+      dispatch(setToken(token));
+    }
+    if (user) {
+      dispatch(setUser(JSON.parse(user)));
+    }
   }, [dispatch]);
 
   return (
     <div className="w-full min-h-screen bg-richblack-900 flex flex-col font-inter">
       <NavBar />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -35,7 +40,7 @@ function App() {
         <Route path="/error" element={<Error />} />
         <Route path="/update-password/:token" element={<UpdatePassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
-        <Route path="/success-change" element={<SuccessChange />} />
+        <Route path="/successChange" element={<SuccessChange />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </div>

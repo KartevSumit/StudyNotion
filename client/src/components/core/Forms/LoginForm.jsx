@@ -30,8 +30,6 @@ function LoginForm({ role }) {
       className="flex flex-col gap-4 text-richblack-200 text-lg"
       onSubmit={handleSubmit}
     >
-      <h2 className="text-2xl text-richblack-5 font-semibold">{role} Login</h2>
-
       <label className="flex flex-col gap-2">
         <span className="text-richblack-5">
           Email<span className="text-pink-200">*</span>
