@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import HighLightText from '../components/core/Home/HighLightText';
 import boxoffice from '../assets/Images/boxoffice.png';
-import Button from '../components/core/Home/Button';
+import Button from '../components/common/Button';
 import TextBox from '../components/core/Home/TextBox';
 import CodeBlock from '../components/core/Home/CodeBlock';
 import Logo1 from '../assets/TimeLineLogo/Logo1.svg';
@@ -24,8 +24,10 @@ import { useSelector } from 'react-redux';
 
 function Home() {
   const { loading } = useSelector((state) => state.auth);
-  return (
-    loading ? (<Spinner/>) :(<div className="w-full min-h-screen flex flex-col justify-center">
+  return loading ? (
+    <Spinner />
+  ) : (
+    <div className="w-full min-h-screen flex flex-col justify-center">
       <div className="w-full min-h-screen relative py-16 flex flex-col items-center gap-16">
         <div className="w-11/12 flex flex-col items-center gap-4 mx-auto">
           <Link to={'/signup'}>
@@ -37,7 +39,7 @@ function Home() {
 
           <div className="w-full lg:w-[55%] flex flex-col items-center my-4 gap-4 px-2 text-center lg:text-start">
             <div className="flex gap-2">
-              <h1 className="font-semibold text-3xl lg:text-4xl text-richblack-5">
+              <h1 className="font-semibold text-3xl lg:text-4xl text-richblack-5 text-center">
                 Empower Your Future with{' '}
                 <HighLightText text={'Coding Skills'} />
               </h1>
@@ -292,7 +294,7 @@ function Home() {
           <Footer />
         </footer>
       </div>
-    </div>)
+    </div>
   );
 }
 

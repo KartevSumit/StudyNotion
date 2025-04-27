@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AuthTemplate from '../components/common/AuthTemplate';
 import ForgotPasswordForm from '../components/core/Forms/ForgotPasswordForm';
 import { useSelector } from 'react-redux';

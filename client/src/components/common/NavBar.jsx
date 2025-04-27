@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { setLoading } from '../../slices/authSlice';
 import { logoutUser } from '../../services/operations/AuthApi';
 import { TfiMenuAlt } from 'react-icons/tfi';
+import useClickOutside from '../../hooks/useOnClickOutside';
 
 export default function NavBar() {
   const { token } = useSelector((s) => s.auth);
@@ -26,6 +27,18 @@ export default function NavBar() {
   const [showMenu, setShowMenu] = useState(false);
   const itemRefs = useRef([]);
   const dispatch = useDispatch();
+  const menuRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  useClickOutside(dropdownRef, () => {
+    setShowDropdown(false);
+    setHovered(false);
+  });
+
+  useClickOutside(menuRef, () => {
+    setShowMenu(false);
+    setShowDropdown(false);
+  });
 
   const Render = async () => {
     dispatch(setLoading(true));
@@ -40,6 +53,7 @@ export default function NavBar() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line
     Render();
   }, []);
 
@@ -238,108 +252,116 @@ export default function NavBar() {
 
       {showMenu && (
         <div className="lg:hidden absolute top-16 left-0 w-full min-h-[93vh] bg-richblack-300/10 backdrop-blur-md border border-white/20 flex flex-col items-center justify-center gap-4 z-50 rounded-lg shadow-xl">
-          {NavbarLinks.map((link) =>
-            link.title !== 'Catalog' ? (
-              <Link key={link.title} to={link.path}>
-                <button
-                  onClick={() => {
-                    setShowMenu(false);
-                    setShowDropdown(false);
-                  }}
-                  className={`bg-transparent px-4 py-2 rounded-lg h-full ${
-                    matchRoute(link.path)
-                      ? 'text-yellow-50'
-                      : 'text-richblack-5'
-                  }`}
-                >
-                  {link.title}
-                </button>
-              </Link>
-            ) : (
-              <div
-                key={link.title}
-                className="group relative min-h-full flex flex-col items-center justify-center"
-              >
-                <div className="flex items-center justify-center">
+          <div
+            className="flex flex-col items-center justify-center gap-4"
+            ref={menuRef}
+          >
+            {NavbarLinks.map((link) =>
+              link.title !== 'Catalog' ? (
+                <Link key={link.title} to={link.path}>
                   <button
-                    onClick={handleDropdownClick}
-                    className={`bg-transparent pl-4 p-2 rounded-lg ${
+                    onClick={() => {
+                      setShowMenu(false);
+                      setShowDropdown(false);
+                    }}
+                    className={`bg-transparent px-4 py-2 rounded-lg h-full ${
                       matchRoute(link.path)
                         ? 'text-yellow-50'
                         : 'text-richblack-5'
-                    }`}
+                    } text-2xl font-bold`}
                   >
-                    Category
+                    {link.title}
                   </button>
-                  <IoIosArrowDown className="text-richblack-5 text-base transform group-hover:-rotate-180 transition-all duration-300" />
-                </div>
-
+                </Link>
+              ) : (
                 <div
-                  className={`${
-                    showDropdown ? 'flex' : 'hidden'
-                  } flex-col items-center gap-2 bg-richblack-5 p-4 rounded-lg shadow-lg`}
+                  key={link.title}
+                  className="group relative min-h-full flex flex-col items-center justify-center"
                 >
-                  {sublinks.length > 0 &&
-                    sublinks.map((item, idx) => (
-                      <div
-                        key={item._id}
-                        ref={(el) => (itemRefs.current[idx] = el)}
-                        onMouseMove={(e) => handleMotion(e, idx)}
-                        onMouseLeave={handleLeave}
-                        className="relative font-medium text-center text-md w-32 cursor-pointer group"
-                        onClick={handleLinkClick}
-                      >
-                        <Tilt
-                          tiltAxis="y"
-                          tiltMaxAngleY={20}
-                          perspective={1000}
-                          scale={1.05}
-                          transitionSpeed={300}
-                          gyroscope={true}
-                          className="w-full relative z-10"
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={handleDropdownClick}
+                      className={`bg-transparent pl-4 p-2 rounded-lg ${
+                        matchRoute(link.path)
+                          ? 'text-yellow-50'
+                          : 'text-richblack-5'
+                      } text-2xl font-bold`}
+                    >
+                      Category
+                    </button>
+                    <IoIosArrowDown className="text-richblack-5 text-base transform group-hover:-rotate-180 transition-all duration-300" />
+                  </div>
+
+                  <div
+                    className={`${
+                      showDropdown ? 'flex' : 'hidden'
+                    } flex-col items-center gap-2 bg-richblack-5 p-4 rounded-lg shadow-lg`}
+                    ref={dropdownRef}
+                  >
+                    {sublinks.length > 0 &&
+                      sublinks.map((item, idx) => (
+                        <div
+                          key={item._id}
+                          ref={(el) => (itemRefs.current[idx] = el)}
+                          onMouseMove={(e) => handleMotion(e, idx)}
+                          onMouseLeave={handleLeave}
+                          className="relative font-medium text-center text-md w-32 cursor-pointer group"
+                          onClick={handleLinkClick}
                         >
-                          <button className="w-full h-8 truncate z-10 relative text-richblack-900 bg-richblack-5 rounded-md px-1 shadow-md">
-                            {item.name}
-                          </button>
-                        </Tilt>
-                        {activeIdx === idx && (
-                          <span
-                            className="absolute w-[35%] h-6 bg-black rounded-full filter pointer-events-none blur-md transition-opacity duration-300 -translate-x-1/2 translate-y-1 z-0"
-                            style={{ left: position.x, top: position.y }}
-                          />
-                        )}
-                      </div>
-                    ))}
+                          <Tilt
+                            tiltAxis="y"
+                            tiltMaxAngleY={20}
+                            perspective={1000}
+                            scale={1.05}
+                            transitionSpeed={300}
+                            gyroscope={true}
+                            className="w-full relative z-10"
+                          >
+                            <button className="w-full h-8 truncate z-10 relative text-richblack-900 bg-richblack-5 rounded-md px-1 shadow-md">
+                              {item.name}
+                            </button>
+                          </Tilt>
+                          {activeIdx === idx && (
+                            <span
+                              className="absolute w-[35%] h-6 bg-black rounded-full filter pointer-events-none blur-md transition-opacity duration-300 -translate-x-1/2 translate-y-1 z-0"
+                              style={{ left: position.x, top: position.y }}
+                            />
+                          )}
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            )
-          )}
-          {!token ? (
-            <>
-              <Link to="/login">
-                <button
-                  onClick={() => setShowMenu(false)}
-                  className="text-richblack-5 px-4 py-2 rounded-lg"
-                >
-                  Login
+              )
+            )}
+            {!token ? (
+              <>
+                <Link to="/login">
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="text-richblack-5 px-4 py-2 rounded-lg text-2xl font-bold"
+                  >
+                    Login
+                  </button>
+                </Link>
+                <Link to="/signup">
+                  <button
+                    onClick={() => setShowMenu(false)}
+                    className="text-richblack-5 px-4 py-2 rounded-lg text-2xl font-bold"
+                  >
+                    Sign Up
+                  </button>
+                </Link>
+              </>
+            ) : (
+              <>
+                <button onClick={logoutHandler}>
+                  <h1 className="text-richblack-5 p-2 text-2xl font-bold">
+                    Logout
+                  </h1>
                 </button>
-              </Link>
-              <Link to="/signup">
-                <button
-                  onClick={() => setShowMenu(false)}
-                  className="text-richblack-5 px-4 py-2 rounded-lg"
-                >
-                  Sign Up
-                </button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <button onClick={logoutHandler}>
-                <h1 className="text-richblack-5 p-2">Logout</h1>
-              </button>
-            </>
-          )}
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>

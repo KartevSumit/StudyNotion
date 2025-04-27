@@ -1,6 +1,6 @@
 import React from 'react';
 import HighLightText from './HighLightText';
-import Button from './Button';
+import Button from '../../common/Button';
 
 function TextBox({
   heading1,
