@@ -171,7 +171,7 @@ function Aboutus() {
           <Stats data="200+" text="Courses"></Stats>
           <Stats data="50+" text="Awards"></Stats>
         </div>
-        <div className="h-[80vh] w-[60%] flex items-center justify-center">
+        <div className="min-h-[80vh] w-[60%] flex items-center justify-center">
           <LearningData />
         </div>
       </div>
