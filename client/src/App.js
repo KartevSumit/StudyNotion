@@ -14,18 +14,38 @@ import { useDispatch } from 'react-redux';
 import { setToken } from './slices/authSlice';
 import { setUser } from './slices/profileSlice';
 import Aboutus from './pages/Aboutus';
+import Contact from './pages/Contact';
+import toast from 'react-hot-toast';
+import ProtectRoute from './auth/ProtectRoute';
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Dashboard/Profile';
 
 function App() {
   const dispatch = useDispatch();
+
+  function isTokenExpired() {
+    const token = localStorage.getItem('token');
+    if (!token) return true;
+
+    const payload = token.split('.')[1];
+    const decodedPayload = JSON.parse(atob(payload));
+    return decodedPayload.exp * 1000 < Date.now();
+  }
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
     if (token) {
-      dispatch(setToken(token));
-    }
-    if (user) {
-      dispatch(setUser(JSON.parse(user)));
+      if (isTokenExpired()) {
+        toast.error('Session Expired');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        dispatch(setToken(null));
+        dispatch(setUser(null));
+      } else {
+        dispatch(setToken(token));
+        dispatch(setUser(JSON.parse(user)));
+      }
     }
   }, [dispatch]);
 
@@ -43,6 +63,17 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmail />} />
         <Route path="/successChange" element={<SuccessChange />} />
         <Route path="/about" element={<Aboutus />} />
+        <Route path="/contact" element={<Contact />} />
+
+        <Route
+          element={
+            <ProtectRoute>
+              <Dashboard />
+            </ProtectRoute>
+          }
+        >
+          <Route path="/dashboard/profile" element={<Profile />} />
+        </Route>
         <Route path="*" element={<Error />} />
       </Routes>
     </div>

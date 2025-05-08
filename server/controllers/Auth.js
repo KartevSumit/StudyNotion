@@ -68,9 +68,9 @@ exports.SignUp = async (req, res) => {
       lastName,
       email,
       password,
+      phoneNumber,
       confirmPassword,
       accountType,
-      contactNumber,
       otp,
     } = req.body;
 
@@ -118,7 +118,7 @@ exports.SignUp = async (req, res) => {
       gender: null,
       dateofBirth: null,
       about: null,
-      phone: contactNumber,
+      phone: phoneNumber,
     });
 
     const newUser = await User.create({
@@ -130,7 +130,7 @@ exports.SignUp = async (req, res) => {
       additionalInfo: profile._id,
       image: `https://api.dicebear.com/9.x/initials/svg?seed=${firstName} ${lastName}`,
     });
-
+    await newUser.populate('additionalInfo');
     const payload = {
       email: newUser.email,
       id: newUser._id,
@@ -168,7 +168,7 @@ exports.Login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate('additionalInfo');
     if (!user) {
       return res.status(400).json({
         success: false,

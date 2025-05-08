@@ -114,7 +114,7 @@ export function signupUser(otp, navigate) {
   return async (dispatch, getState) => {
     try {
       dispatch(setLoading(true));
-      const {
+      let {
         firstName,
         lastName,
         email,
@@ -125,12 +125,12 @@ export function signupUser(otp, navigate) {
         accountType,
       } = getState().auth.signupData;
 
+      phoneNumber = countryCode+phoneNumber;
       const res = await apiConnector('POST', auth.SIGNUP, {
         firstName,
         lastName,
         email,
         phoneNumber,
-        countryCode,
         password,
         confirmPassword,
         accountType,

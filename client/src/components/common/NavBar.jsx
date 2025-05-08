@@ -14,6 +14,7 @@ import { setLoading } from '../../slices/authSlice';
 import { logoutUser } from '../../services/operations/AuthApi';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import useClickOutside from '../../hooks/useOnClickOutside';
+import useNavColor from '../../hooks/useNavColor';
 
 export default function NavBar() {
   const { token } = useSelector((s) => s.auth);
@@ -53,8 +54,8 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line
     Render();
+    // eslint-disable-next-line
   }, []);
 
   const location = useLocation();
@@ -95,12 +96,13 @@ export default function NavBar() {
   };
 
   const { loading } = useSelector((state) => state.auth);
+  const NavColor = useNavColor();
 
   return (
     <div
       className={`w-full h-16 ${
         loading ? `hidden` : `flex`
-      } items-center lg:justify-around justify-between border-b-2 border-richblack-700 font-semibold text-lg px-4`}
+      } ${NavColor} items-center lg:justify-around justify-between border-b-2 border-richblack-700 font-semibold text-lg px-4`}
     >
       <Link to={'/'}>
         <img src={logo} alt="Logo" />
