@@ -19,6 +19,9 @@ import toast from 'react-hot-toast';
 import ProtectRoute from './auth/ProtectRoute';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Dashboard/Profile';
+import Settings from './pages/Dashboard/Settings';
+import EnrolledCourses from './pages/Dashboard/EnrolledCourse';
+import Cart from './pages/Dashboard/Cart';
 
 function App() {
   const dispatch = useDispatch();
@@ -72,7 +75,14 @@ function App() {
             </ProtectRoute>
           }
         >
-          <Route path="/dashboard/profile" element={<Profile />} />
+          <Route path="/dashboard/my-profile" element={<Profile />} />
+          <Route path="/dashboard/settings" element={<Settings />} />
+          <Route
+            path="/dashboard/enrolled-courses"
+            element={<EnrolledCourses />}
+          />
+          <Route path="/dashboard/cart" element={<Cart />} />
+          
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

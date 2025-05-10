@@ -19,6 +19,10 @@ const profileSchema = new mongoose.Schema({
     default: null,
     trim: true,
   },
+  profession: {
+    type: String,
+    default: null,
+  },
 });
 
 module.exports = mongoose.model('Profile', profileSchema);

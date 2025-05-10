@@ -3,9 +3,9 @@ const Profile = require('../models/profile.model');
 
 exports.updateProfile = async (req, res) => {
   try {
-    const { gender, dateofBirth, about, phone } = req.body;
+    const { gender, dateofBirth, about, phone, profession } = req.body;
 
-    if (!gender || !dateofBirth || !about || !phone) {
+    if (!gender || !dateofBirth || !about || !phone || !profession) {
       return res.status(400).json({
         success: false,
         message: 'All fields are required',
@@ -29,6 +29,7 @@ exports.updateProfile = async (req, res) => {
         dateofBirth: Date(dateofBirth),
         about: about,
         phone: phone,
+        profession: profession
       },
       { new: true }
     );

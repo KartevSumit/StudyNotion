@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "value": "student",
+    "label": "Student"
+  },
+  {
+    "id": 2,
+    "value": "graduate",
+    "label": "Graduate"
+  },
+  {
+    "id": 3,
+    "value": "post_graduate",
+    "label": "Post Graduate"
+  },
+  {
+    "id": 4,
+    "value": "teacher",
+    "label": "Teacher"
+  },
+  {
+    "id": 5,
+    "value": "researcher",
+    "label": "Researcher"
+  },
+  {
+    "id": 6,
+    "value": "professional",
+    "label": "Working Professional"
+  },
+  {
+    "id": 7,
+    "value": "freelancer",
+    "label": "Freelancer"
+  },
+  {
+    "id": 8,
+    "value": "self_employed",
+    "label": "Self-Employed"
+  },
+  {
+    "id": 9,
+    "value": "unemployed",
+    "label": "Unemployed"
+  }
+]

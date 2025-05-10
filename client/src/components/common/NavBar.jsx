@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import logo from '../../assets/Logo/Logo-Full-Light.png';
 import { NavbarLinks } from '../../data/navbar-links';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaCartShopping } from 'react-icons/fa6';
 //import ProfileDropDown from '../core/Auth/ProfileDropDown';
@@ -11,7 +11,6 @@ import { IoIosArrowDown } from 'react-icons/io';
 import Tilt from 'react-parallax-tilt';
 import { useDispatch } from 'react-redux';
 import { setLoading } from '../../slices/authSlice';
-import { logoutUser } from '../../services/operations/AuthApi';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import useClickOutside from '../../hooks/useOnClickOutside';
 import useNavColor from '../../hooks/useNavColor';
@@ -59,7 +58,6 @@ export default function NavBar() {
   }, []);
 
   const location = useLocation();
-  const navigate = useNavigate();
   const matchRoute = (path) => location.pathname === path;
 
   const handleMotion = (e, idx) => {
@@ -85,14 +83,6 @@ export default function NavBar() {
     setShowDropdown(false);
     setHovered(false);
     setShowMenu(false);
-  };
-
-  const logoutHandler = async () => {
-    try {
-      dispatch(logoutUser(navigate));
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const { loading } = useSelector((state) => state.auth);
@@ -129,15 +119,16 @@ export default function NavBar() {
             >
               <button
                 onClick={handleDropdownClick}
-                className={`bg-transparent pl-4 p-2 rounded-lg ${
+                className={`bg-transparent pl-4 pr-7 p-2 rounded-lg ${
                   matchRoute(link.path) ? 'text-yellow-50' : 'text-richblack-5'
                 }`}
               >
                 Category
               </button>
-              <IoIosArrowDown className="text-richblack-5 text-base absolute -right-3 top-6 transform group-hover:-rotate-180 transition-all duration-300" />
+              <IoIosArrowDown className="text-richblack-5 text-base absolute right-1 top-6 transform group-hover:-rotate-180 transition-all duration-300" />
 
               <div
+                ref={dropdownRef}
                 className={`${
                   showDropdown || hovered ? 'flex' : 'hidden'
                 } flex-col items-center gap-2 bg-white absolute top-14 p-4 rounded-lg shadow-lg z-50 left-1/2 -translate-x-1/2`}
@@ -214,9 +205,6 @@ export default function NavBar() {
                 />
               </button>
             </Link>
-            <button onClick={logoutHandler}>
-              <h1 className="text-richblack-5 p-2">Logout</h1>
-            </button>
           </>
         )}
       </div>
@@ -335,7 +323,7 @@ export default function NavBar() {
                 </div>
               )
             )}
-            {!token ? (
+            {!token && (
               <>
                 <Link to="/login">
                   <button
@@ -353,14 +341,6 @@ export default function NavBar() {
                     Sign Up
                   </button>
                 </Link>
-              </>
-            ) : (
-              <>
-                <button onClick={logoutHandler}>
-                  <h1 className="text-richblack-5 p-2 text-2xl font-bold">
-                    Logout
-                  </h1>
-                </button>
               </>
             )}
           </div>

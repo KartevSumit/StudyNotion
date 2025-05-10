@@ -119,6 +119,7 @@ exports.SignUp = async (req, res) => {
       dateofBirth: null,
       about: null,
       phone: phoneNumber,
+      profession: null,
     });
 
     const newUser = await User.create({

@@ -1,22 +1,27 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { useSelector } from 'react-redux';
 import EditButton from '../../components/core/Dashboard/EditButton';
 import Details from '../../components/core/Dashboard/Details';
+import ImagePreviewModal from '../../components/common/ImagePreviewModal';
 
 function Profile() {
   const { user } = useSelector((state) => state.profile);
+  const [previewImage, setPreviewImage] = useState(false);
   return (
-    <div className="w-full h-[92vh] flex items-center justify-center">
-      <div className="w-[50%] flex flex-col items-start gap-10">
+    <div className="w-[85%] min-h-[92vh] flex justify-start p-12">
+      <div className="w-[55%] flex flex-col items-start gap-10">
         <h1 className="text-3xl lg:text-4xl text-richblack-5 font-semibold">
           My Profile
         </h1>
-        <div className="w-full flex flex-col gap-8">
-          <div className="w-full flex bg-richblack-800 p-6 justify-between items-start rounded-md">
+        <div className="w-full flex flex-col gap-8 ml-20">
+          <div className="w-full flex bg-richblack-800 p-8 justify-between items-start rounded-md">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full overflow-hidden">
+              <button
+                className="w-20 h-20 rounded-full overflow-hidden "
+                onClick={() => setPreviewImage(true)}
+              >
                 <img src={user.image} alt="" />
-              </div>
+              </button>
               <div>
                 <h1 className="text-xl text-richblack-25 font-semibold">
                   {user.firstName} {user.lastName}
@@ -26,7 +31,7 @@ function Profile() {
             </div>
             <EditButton />
           </div>
-          <div className="w-full flex flex-col bg-richblack-800 p-6 rounded-md gap-3">
+          <div className="w-full flex flex-col bg-richblack-800 p-8 rounded-md gap-3">
             <div className="w-full flex justify-between items-center">
               <h1 className="ml-2 text-richblack-5 text-xl font-semibold">
                 About
@@ -39,7 +44,7 @@ function Profile() {
                 : 'Add about section to view it'}
             </p>
           </div>
-          <div className="w-full flex flex-col bg-richblack-800 p-6 rounded-md gap-3">
+          <div className="w-full flex flex-col bg-richblack-800 p-8 rounded-md gap-3">
             <div className="w-full flex justify-between items-center">
               <h1 className="ml-2 text-richblack-5 text-xl font-semibold">
                 Personal Details
@@ -84,6 +89,12 @@ function Profile() {
           </div>
         </div>
       </div>
+      {previewImage && (
+        <ImagePreviewModal
+          image={user.image}
+          setPreviewImage={setPreviewImage}
+        />
+      )}
     </div>
   );
 }
