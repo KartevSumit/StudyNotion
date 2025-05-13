@@ -12,7 +12,6 @@ export function getPasswordResetToken() {
       const response = await apiConnector('POST', auth.RESET_PASSWORD_TOKEN, {
         email,
       });
-
       if (response.data.success) {
         dispatch(setEmailSent(true));
         toast.success('Email sent successfully. Please check your inbox.');
@@ -98,7 +97,7 @@ export function loginUser(email, password, navigate, role) {
         localStorage.setItem('token', res.data.data.token);
         dispatch(setUser(res.data.data));
         localStorage.setItem('user', JSON.stringify(res.data.data));
-        navigate('/dashboard');
+        navigate('/dashboard/my-profile');
       } else {
         throw new Error('Login failed');
       }
@@ -125,7 +124,7 @@ export function signupUser(otp, navigate) {
         accountType,
       } = getState().auth.signupData;
 
-      phoneNumber = countryCode+phoneNumber;
+      phoneNumber = countryCode + ' ' + phoneNumber;
       const res = await apiConnector('POST', auth.SIGNUP, {
         firstName,
         lastName,
@@ -143,7 +142,7 @@ export function signupUser(otp, navigate) {
         localStorage.setItem('token', res.data.data.token);
         dispatch(setUser(res.data.data));
         localStorage.setItem('user', JSON.stringify(res.data.data));
-        navigate('/dashboard');
+        navigate('/dashboard/my-profile');
       } else {
         throw new Error('Signup failed');
       }

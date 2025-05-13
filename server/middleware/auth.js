@@ -7,7 +7,8 @@ exports.auth = (req, res, next) => {
     const token =
       req.cookies.token ||
       req.body.token ||
-      req.headers('Authorisation').reaplace('Bearer ', '');
+      (req.headers.authorization &&
+        req.headers.authorization.replace('Bearer ', ''));
 
     if (!token) {
       return res.status(401).json({

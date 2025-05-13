@@ -40,5 +40,6 @@ export const PAYMENT_API = {
 // Profile API endpoints
 export const PROFILE_API = {
   GET_ALL_PROFILES: BASE_URL + API_VERSION + '/profile/getAllProfile',
-  UPDATE_PROFILE: BASE_URL + API_VERSION + '/profile/updateProfile'
+  UPDATE_PROFILE: BASE_URL + API_VERSION + '/profile/updateProfile',
+  UPDATE_PROFILE_IMAGE: BASE_URL + API_VERSION + '/profile/updateProfileImage'
 };

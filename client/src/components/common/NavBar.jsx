@@ -196,7 +196,7 @@ export default function NavBar() {
           </>
         ) : (
           <>
-            <Link to="/dashboard/profile" className="m-auto w-10 h-10">
+            <Link to="/dashboard/my-profile" className="m-auto w-10 h-10">
               <button className="w-10 h-10 rounded-full overflow-hidden m-auto">
                 <img
                   src={user?.image}
@@ -221,7 +221,7 @@ export default function NavBar() {
           </Link>
         )}
         {token && (
-          <Link to="/dashboard/profile" className="m-auto w-10 h-10">
+          <Link to="/dashboard/my-profile" className="m-auto w-10 h-10">
             <button className="w-10 h-10 rounded-full overflow-hidden m-auto">
               <img
                 src={user?.image}

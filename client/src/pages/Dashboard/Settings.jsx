@@ -1,5 +1,5 @@
-import { React, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import IconButton from '../../components/common/IconButton';
 import Spinner from '../../components/common/Spinner';
@@ -8,9 +8,12 @@ import countryCodes from '../../data/countrycode.json';
 import professions from '../../data/professions.json';
 import { BiShow, BiHide } from 'react-icons/bi';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { updateProfileImage } from '../../services/operations/ProfileApi';
 
 function Settings() {
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.profile);
+  const { token } = useSelector((state) => state.auth);
   const [profile, setProfile] = useState(user);
   const { loading: authloading } = useSelector((state) => state.auth);
   const { loading: profileloading } = useSelector((state) => state.profile);
@@ -88,6 +91,14 @@ function Settings() {
         value: `${code}${' '}${phoneNumber}`,
       },
     });
+  };
+
+  const handleSubmit = () => {
+    console.log('submit ', profile);
+    const formData = new FormData();
+    formData.append('image', profile.image);
+    formData.append('email', profile.email);
+    dispatch(updateProfileImage(token, formData));
   };
 
   return (
@@ -186,7 +197,7 @@ function Settings() {
               </h1>
               <div className="w-full h-12 p-4 bg-richblack-700 border border-richblack-600 rounded-xl flex items-center gap-8 text-lg">
                 {options.map((gen) => (
-                  <label className="flex items-center gap-2">
+                  <label key={gen} className="flex items-center gap-2">
                     <div
                       className={`flex w-5 h-5 rounded-full items-center justify-center ${
                         profile.gender === gen
@@ -198,6 +209,7 @@ function Settings() {
                         type="radio"
                         name="gender"
                         value={gen}
+                        key={gen}
                         onChange={handleInputChange}
                         checked={profile.gender === gen}
                         required
@@ -372,7 +384,11 @@ function Settings() {
             text="Cancel"
             customClass={'bg-richblack-800 text-richblack-200'}
           />
-          <IconButton text="Save" customClass={'bg-yellow-50'} />
+          <IconButton
+            text="Save"
+            customClass={'bg-yellow-50'}
+            onClick={handleSubmit}
+          />
         </div>
 
         <div className="w-full flex bg-pink-900 p-8 border border-pink-700 items-start gap-6 rounded-md">
