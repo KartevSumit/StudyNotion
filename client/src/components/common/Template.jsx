@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import frame from '../../assets/Images/frame.png';
 import auth from '../../assets/Images/AuthInstructor.png';
 import { cloneElement } from 'react';
+import { setSignupData } from '../../slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Template({ heading, content1, content2, Form, photo }) {
   const [Role, setRole] = useState('Student');
-
+  const dispatch = useDispatch();
   const head = (Role === 'Student' && heading) || 'Welcome Back!';
   const content = (Role === 'Student' && content1) || 'Discover your passion,';
   const content2text = (Role === 'Student' && content2) || 'Be Unstoppable';
   const image = (Role === 'Student' && photo) || auth;
-
+  const { signupData } = useSelector((state) => state.auth);
   const handleClick = (e) => {
     setRole(e.target.value);
+    dispatch(setSignupData({ ...signupData, accountType: e.target.value }));
+    console.log(signupData);
   };
 
   return (

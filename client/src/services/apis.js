@@ -1,4 +1,4 @@
-const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:4000";
+const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:4000';
 const API_VERSION = '/api/v1';
 
 // Auth API endpoints
@@ -9,7 +9,7 @@ export const AUTH_API = {
   CHANGE_PASSWORD: BASE_URL + API_VERSION + '/auth/changePassword',
   LOGOUT: BASE_URL + API_VERSION + '/auth/logout',
   RESET_PASSWORD_TOKEN: BASE_URL + API_VERSION + '/auth/resetPasswordToken',
-  RESET_PASSWORD: BASE_URL + API_VERSION + '/auth/resetPassword'
+  RESET_PASSWORD: BASE_URL + API_VERSION + '/auth/resetPassword',
 };
 
 // Course API endpoints
@@ -26,20 +26,25 @@ export const COURSE_API = {
   CREATE_CATEGORY: BASE_URL + API_VERSION + '/course/createCategory',
   GET_ALL_CATEGORIES: BASE_URL + API_VERSION + '/course/getAllCategories',
   GET_CATEGORY_PAGE: BASE_URL + API_VERSION + '/course/getCategoryPage',
-  CREATE_RATING_AND_REVIEW: BASE_URL + API_VERSION + '/course/createRatingAndReview',
+  CREATE_RATING_AND_REVIEW:
+    BASE_URL + API_VERSION + '/course/createRatingAndReview',
   GET_AVERAGE_RATING: BASE_URL + API_VERSION + '/course/getAverageRating',
-  GET_ALL_RATING: BASE_URL + API_VERSION + '/course/getAllRating'
+  GET_ALL_RATING: BASE_URL + API_VERSION + '/course/getAllRating',
 };
 
 // Payment API endpoints
 export const PAYMENT_API = {
   CAPTURE_PAYMENT: BASE_URL + API_VERSION + '/payment/capturePayment',
-  VERIFY_SIGNATURE: BASE_URL + API_VERSION + '/payment/verifySignature'
+  VERIFY_SIGNATURE: BASE_URL + API_VERSION + '/payment/verifySignature',
 };
 
 // Profile API endpoints
 export const PROFILE_API = {
   GET_ALL_PROFILES: BASE_URL + API_VERSION + '/profile/getAllProfile',
   UPDATE_PROFILE: BASE_URL + API_VERSION + '/profile/updateProfile',
-  UPDATE_PROFILE_IMAGE: BASE_URL + API_VERSION + '/profile/updateProfileImage'
+  UPDATE_PROFILE_IMAGE: BASE_URL + API_VERSION + '/profile/updateProfileImage',
+  UPLOAD_PROFILE_IMAGE: BASE_URL + API_VERSION + '/profile/uploadProfileImage',
+  DELETE_CURRENT_IMAGE: BASE_URL + API_VERSION + '/profile/deleteCurrentImage',
+  UPDATE_PASSWORD: BASE_URL + API_VERSION + '/profile/updatePassword',
+  DELETE_USER: BASE_URL + API_VERSION + '/profile/deleteUser',
 };

@@ -2,12 +2,12 @@ import { React, useState } from 'react';
 import countryCodes from '../../../data/countrycode.json';
 import { BiHide } from 'react-icons/bi';
 import { BiShow } from 'react-icons/bi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { sendOtp } from '../../../services/operations/AuthApi';
 import { useNavigate } from 'react-router-dom';
 import { setSignupData } from '../../../slices/authSlice';
 
-function SignUpForm({ role }) {
+function SignUpForm() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -16,9 +16,8 @@ function SignUpForm({ role }) {
     countryCode: '+91',
     password: '',
     confirmPassword: '',
-    accountType: role,
   });
-
+  const { signupData } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +41,8 @@ function SignUpForm({ role }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(setSignupData(formData));
+    dispatch(setSignupData({ ...signupData, ...formData }));
+    console.log('signup form', signupData);
     dispatch(sendOtp(formData.email, navigate));
     setFormData({
       firstName: '',

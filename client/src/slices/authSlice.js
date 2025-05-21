@@ -1,12 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  signupData: null,
+  signupData: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    phoneNumber: '',
+    countryCode: '',
+    password: '',
+    confirmPassword: '',
+    accountType: '',
+  },
   loading: false,
   token: localStorage.getItem('token') || null,
   email: '',
   emailSent: false,
-};  
+};
 
 const authSlice = createSlice({
   name: 'auth',

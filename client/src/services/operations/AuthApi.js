@@ -124,6 +124,17 @@ export function signupUser(otp, navigate) {
         accountType,
       } = getState().auth.signupData;
 
+      console.log(
+        'signup',
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        password,
+        confirmPassword,
+        accountType,
+        otp
+      );
       phoneNumber = countryCode + ' ' + phoneNumber;
       const res = await apiConnector('POST', auth.SIGNUP, {
         firstName,
