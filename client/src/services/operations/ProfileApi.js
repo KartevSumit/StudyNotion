@@ -155,12 +155,12 @@ export function changePassword(
   };
 }
 
-export function deleteUser(token,navigate) {
+export function deleteUser(token, navigate) {
   return async (dispatch) => {
     dispatch(setLoading(true));
     console.log(profile.DELETE_USER);
     try {
-      const res = await apiConnector(
+      await apiConnector(
         'DELETE',
         profile.DELETE_USER,
         {},
@@ -176,6 +176,7 @@ export function deleteUser(token,navigate) {
       dispatch(setUser(null));
       navigate('/');
       toast.success('Profile deleted successfully');
+      toast.success('Deleted can can be recovered within 7 days');
     } catch (error) {
       toast.error(error?.response?.data?.message || 'Something went wrong.');
     }

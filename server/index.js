@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { cloudinaryConnect } = require('./config/cloudinary');
 require('./cron-service/deleteTempFile');
+require('./cron-service/deleteDeletdUsers');
 
 const app = express();
 const PORT = process.env.PORT || 3000;

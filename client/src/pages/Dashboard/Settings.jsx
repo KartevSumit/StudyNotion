@@ -17,6 +17,7 @@ import {
   deleteUser,
 } from '../../services/operations/ProfileApi';
 import { setDeleteImage, setSelectedImage } from '../../slices/profileSlice';
+import ComfirmationModal from '../../components/common/ConfirmationModal';
 
 function Settings() {
   const dispatch = useDispatch();
@@ -41,6 +42,10 @@ function Settings() {
   });
   const { selectedImage } = useSelector((state) => state.profile);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [confirmDP, setConfirmDP] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [confirmProfileChange, setConfirmProfileChange] = useState(false);
+  const [confirmPasswordChange, setConfirmPasswordChange] = useState(false);
 
   useEffect(() => {
     if (selectedImage) {
@@ -192,8 +197,73 @@ function Settings() {
     dispatch(deleteUser(token, navigate));
   };
 
+  const confirmDPModal = {
+    heading: 'Are you sure?',
+    description: 'Your current profile picture will be replaced.',
+    text1: 'Save',
+    text2: 'Cancel',
+    customClass1: `bg-yellow-100`,
+    customClass2: `bg-richblack-400`,
+    onClick2: () => setConfirmDP(false),
+    onClick1: () => {
+      handleSubmit();
+      setConfirmDP(false);
+    },
+  };
+
+  const confirmDeleteModal = {
+    heading: 'Are you sure?',
+    description: 'Your account will be permanently deleted.',
+    text1: 'Delete',
+    text2: 'Cancel',
+    customClass1: `bg-yellow-100`,
+    customClass2: `bg-richblack-400`,
+    onClick2: () => setConfirmDelete(false),
+    onClick1: () => {
+      handleDeleteAccount();
+      setConfirmDelete(false);
+    },
+  };
+
+  const confirmPasswordChangeModal = {
+    heading: 'Are you sure?',
+    description: 'Your password will be changed.',
+    text1: 'Save',
+    text2: 'Cancel',
+    customClass1: `bg-yellow-100`,
+    customClass2: `bg-richblack-400`,
+    onClick2: () => setConfirmPasswordChange(false),
+    onClick1: () => {
+      handleUpdatePassword();
+      setConfirmPasswordChange(false);
+    },
+  };
+
+  const confirmProfileChangeModal = {
+    heading: 'Are you sure?',
+    description: 'Your profile will be changed.',
+    text1: 'Save',
+    text2: 'Cancel',
+    customClass1: `bg-yellow-100`,
+    customClass2: `bg-richblack-400`,
+    onClick2: () => setConfirmProfileChange(false),
+    onClick1: () => {
+      handleSubmitDetails();
+      setConfirmProfileChange(false);
+    },
+  };
+
   return (
     <div className="w-[85%] min-h-[92vh] flex flex-col gap-10 p-12 overflow-y-auto">
+      {confirmDP && <ComfirmationModal modalData={confirmDPModal} />}
+      {confirmDelete && <ComfirmationModal modalData={confirmDeleteModal} />}
+      {confirmPasswordChange && (
+        <ComfirmationModal modalData={confirmPasswordChangeModal} />
+      )}
+      {confirmProfileChange && (
+        <ComfirmationModal modalData={confirmProfileChangeModal} />
+      )}
+
       <div className="flex flex-col gap-4">
         <Link to="/dashboard/my-profile">
           <h1 className="text-richblack-300 text-sm">{'< Back'}</h1>
@@ -202,7 +272,6 @@ function Settings() {
           Edit Profile
         </h1>
       </div>
-
       <div className="w-[55%] flex flex-col gap-8 ml-20">
         {/* profile picture */}
         <div className="w-full flex bg-richblack-800 p-8 border border-richblack-600 justify-between items-start rounded-md">
@@ -252,7 +321,9 @@ function Settings() {
           <IconButton
             text="Save"
             customClass={'bg-yellow-50'}
-            onClick={handleSubmit}
+            onClick={() => {
+              setConfirmDP(true);
+            }}
           />
         </div>
 
@@ -422,7 +493,9 @@ function Settings() {
           <IconButton
             text="Save"
             customClass={'bg-yellow-50'}
-            onClick={handleSubmitDetails}
+            onClick={() => {
+              setConfirmProfileChange(true);
+            }}
           />
         </div>
 
@@ -512,7 +585,9 @@ function Settings() {
           <IconButton
             text="Save"
             customClass={'bg-yellow-50'}
-            onClick={handleUpdatePassword}
+            onClick={() => {
+              setConfirmPasswordChange(true);
+            }}
           />
         </div>
 
@@ -533,7 +608,9 @@ function Settings() {
               remove all the contain associated with it.
             </p>
             <button
-              onClick={handleDeleteAccount}
+              onClick={() => {
+                setConfirmDelete(true);
+              }}
               className="text-start text-md font-medium text-pink-500 italic w-fit"
             >
               I want to delete my account.
@@ -541,7 +618,6 @@ function Settings() {
           </div>
         </div>
       </div>
-
       {previewImage && (
         <ImagePreviewModal
           image={profile.image}

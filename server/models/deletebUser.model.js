@@ -53,6 +53,10 @@ const deletedUserSchema = new mongoose.Schema({
   resetPasswordExpires: {
     type: Date,
   },
+  deletedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('DeletedUser', deletedUserSchema);

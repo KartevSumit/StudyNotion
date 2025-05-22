@@ -7,6 +7,7 @@ const OTP = require('../models/otp.model');
 const otpGenerator = require('otp-generator');
 const mailSender = require('../utils/mailSender');
 const Profile = require('../models/profile.model');
+const DeletedUser = require('../models/deletebUser.model');
 
 exports.SendOTP = async (req, res) => {
   try {
@@ -169,13 +170,28 @@ exports.Login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email }).populate('additionalInfo');
+    let user = await User.findOne({ email }).populate('additionalInfo');
     if (!user) {
-      return res.status(400).json({
-        success: false,
-        message: 'User not found',
-      });
+      user = await DeletedUser.findOne({ email }).populate('additionalInfo');
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+const userDataToRestore = user.toObject();
+      
+      delete userDataToRestore._id;
+      delete userDataToRestore.__v;
+      delete userDataToRestore.deletedAt;
+      
+      await User.create(userDataToRestore);
+      
+      await DeletedUser.findByIdAndDelete(user._id);
+      
+      user = await User.findOne({ email }).populate('additionalInfo');
     }
+
     const payload = {
       email: user.email,
       id: user._id,
