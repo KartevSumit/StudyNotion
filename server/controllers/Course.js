@@ -1,20 +1,29 @@
 const Course = require('../models/course.model');
 const Category = require('../models/category.model');
 const User = require('../models/user.model');
-const { fileUploader } = require('../utils/fileUploader');
+const { fileUploader2 } = require('../utils/fileUploader');
 
 exports.createCourse = async (req, res) => {
   try {
     const userID = req.user._id;
-    const { courseName, courseDescription, whatyouwilllearn, price, category } =
-      req.body;
-    const thumbnail = req.files.thumbnail;
+    const { 
+      courseName, 
+      courseDescription, 
+      whatyouwilllearn, 
+      price, 
+      category, 
+      tags, 
+      requirements 
+    } = req.body;
+    const thumbnail = req.file;
 
     console.log(
       courseDescription,
       whatyouwilllearn,
       price,
       category,
+      tags,
+      requirements,
       thumbnail
     );
 
@@ -24,6 +33,8 @@ exports.createCourse = async (req, res) => {
       !whatyouwilllearn ||
       !price ||
       !category ||
+      !tags ||
+      !requirements ||
       !thumbnail
     ) {
       return res.status(400).json({
@@ -40,7 +51,25 @@ exports.createCourse = async (req, res) => {
       });
     }
 
-    const thumbnailImage = await fileUploader(thumbnail, process.env.FOLDER);
+    let processedTags, processedRequirements;
+    
+    try {
+      processedTags = Array.isArray(tags) ? tags : JSON.parse(tags);
+    } catch (error) {
+      processedTags = typeof tags === 'string' 
+        ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+        : [];
+    }
+    
+    try {
+      processedRequirements = Array.isArray(requirements) ? requirements : JSON.parse(requirements);
+    } catch (error) {
+      processedRequirements = typeof requirements === 'string'
+        ? requirements.split(',').map(req => req.trim()).filter(req => req.length > 0)
+        : [];
+    }
+
+    const thumbnailImage = await fileUploader2(thumbnail, process.env.FOLDER);
 
     const course = await Course.create({
       courseName: courseName,
@@ -50,7 +79,11 @@ exports.createCourse = async (req, res) => {
       thumbnail: thumbnailImage.secure_url,
       instructor: req.user.id,
       category: categoryDetails._id,
+      tags: processedTags,
+      requirements: processedRequirements,
     });
+
+    await course.populate('category');
 
     await User.findByIdAndUpdate(
       userID,
@@ -155,6 +188,56 @@ exports.getCourseDetails = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error in fetching course',
+      error: error.message,
+    });
+  }
+};
+
+exports.editCourseDetails = async (req, res) => {
+  try {
+    const {
+      courseId,
+      courseName,
+      courseDescription,
+      whatyouwilllearn,
+      price,
+      category,
+      requirements,
+    } = req.body;
+
+    if (!courseId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide course id',
+      });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(400).json({
+        success: false,
+        message: 'Course not found',
+      });
+    }
+
+    if (courseName) course.courseName = courseName;
+    if (courseDescription) course.courseDescription = courseDescription;
+    if (whatyouwilllearn) course.whatyouwilllearn = whatyouwilllearn;
+    if (price) course.price = price;
+    if (category) course.category = category;
+    if (requirements) course.requirements = requirements;
+
+    await course.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Course updated successfully',
+      data: course,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error in updating course',
       error: error.message,
     });
   }

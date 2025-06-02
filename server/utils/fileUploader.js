@@ -39,3 +39,33 @@ exports.fileUploader = async (file, folder) => {
     throw error;
   }
 };
+
+exports.fileUploader2 = async (file, folder) => {
+  try {
+    console.log('File path:', file.path);
+
+    if (!fs.existsSync(file.path)) {
+      console.error(`File does not exist at path: ${file.path}`);
+      throw new Error('File not found at specified path');
+    }
+
+    const options = {
+      folder,
+      resource_type: 'auto',
+    };
+
+    console.log('Uploading file to Cloudinary...');
+
+    const result = await cloudinary.uploader.upload(file.path, options);
+    console.log('Upload successful. Public ID:', result.public_id);
+
+    fs.unlink(file.path, (err) => {
+      if (err) console.error('Error deleting file:', err);
+    });
+
+    return result;
+  } catch (error) {
+    console.error('File upload error:', error);
+    throw error;
+  }
+};

@@ -1,13 +1,16 @@
 const Section = require('../models/section.model');
 const SubSection = require('../models/subSection.model');
-const { fileUploader } = require('../utils/fileUploader');
+const Course = require('../models/course.model');
+const { fileUploader2 } = require('../utils/fileUploader');
 require('dotenv').config();
 
 exports.createSubSection = async (req, res) => {
   try {
-    const { sectionId, title, timeDuration, description } = req.body;
+    const { sectionId, title, timeDuration, description, courseId } = req.body;
 
-    const video = req.file.video;
+    const video = req.file;
+
+    console.log(sectionId, title, timeDuration, description, video);
 
     if (!sectionId || !title || !timeDuration || !description || !video) {
       return res.status(400).json({
@@ -16,7 +19,7 @@ exports.createSubSection = async (req, res) => {
       });
     }
 
-    const response = await fileUploader(video, process.env.FOLDER);
+    const response = await fileUploader2(video, process.env.FOLDER);
 
     const subsection = await SubSection.create({
       title: title,
@@ -35,10 +38,18 @@ exports.createSubSection = async (req, res) => {
 
     await updatedSection.populate('subSections');
 
+    const updatedCourse = await Course.findById(courseId);
+    await updatedCourse.populate({
+      path: 'courseContent',
+      populate: {
+        path: 'subSections',
+      },
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Subsection created successfully',
-      data: updatedSection,
+      data: updatedCourse,
     });
   } catch (error) {
     return res.status(500).json({
@@ -51,10 +62,12 @@ exports.createSubSection = async (req, res) => {
 
 exports.updateSubSection = async (req, res) => {
   try {
-    const { subsectionId, title, timeDuration, description } = req.body;
-    const video = req.files?.video;
+    console.log(req.body);
+    const { subsectionId, title, timeDuration, description, courseId } =
+      req.body;
+    const video = req.file;
 
-    if (!subsectionId || !title || !timeDuration || !description) {
+    if (!subsectionId || !title || !timeDuration || !description || !courseId) {
       return res.status(400).json({
         success: false,
         message: 'All fields are required',
@@ -62,9 +75,9 @@ exports.updateSubSection = async (req, res) => {
     }
 
     let updatedSubSection;
-
+    
     if (video) {
-      const response = await fileUploader(video, process.env.FOLDER);
+      const response = await fileUploader2(video, process.env.FOLDER);
       updatedSubSection = await SubSection.findByIdAndUpdate(
         subsectionId,
         {
@@ -86,11 +99,21 @@ exports.updateSubSection = async (req, res) => {
         { new: true }
       );
     }
-
+    
+    
+    const updatedCourse = await Course.findById(courseId);
+    await updatedCourse.populate({
+      path: 'courseContent',
+      populate: {
+        path: 'subSections',
+      },
+    });
+    
+    console.log("done");
     return res.status(200).json({
       success: true,
       message: 'Subsection updated successfully',
-      data: updatedSubSection,
+      data: updatedCourse,
     });
   } catch (error) {
     return res.status(500).json({
@@ -103,7 +126,7 @@ exports.updateSubSection = async (req, res) => {
 
 exports.deleteSubSection = async (req, res) => {
   try {
-    const { subsectionId, sectionId } = req.body;
+    const { subsectionId, sectionId, courseId } = req.body;
 
     if (!subsectionId || !sectionId) {
       return res.status(400).json({
@@ -123,10 +146,18 @@ exports.deleteSubSection = async (req, res) => {
 
     const deletedSubSection = await SubSection.findByIdAndDelete(subsectionId);
 
+    const updatedCourse = await Course.findById(courseId);
+    await updatedCourse.populate({
+      path: 'courseContent',
+      populate: {
+        path: 'subSections',
+      },
+    });
+
     return res.status(200).json({
       success: true,
       message: 'Subsection deleted successfully',
-      data: deletedSubSection,
+      data: updatedCourse,
     });
   } catch (error) {
     return res.status(500).json({

@@ -10,7 +10,7 @@ import UpdatePassword from './pages/UpdatePassword';
 import VerifyEmail from './pages/VerifyEmail';
 import SuccessChange from './pages/SuccessChange';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from './slices/authSlice';
 import { setUser } from './slices/profileSlice';
 import Aboutus from './pages/Aboutus';
@@ -22,10 +22,13 @@ import Profile from './pages/Dashboard/Profile';
 import Settings from './pages/Dashboard/Settings';
 import EnrolledCourses from './pages/Dashboard/EnrolledCourse';
 import Cart from './pages/Dashboard/Cart';
+import AddCourses from './pages/Dashboard/AddCourses';
+import { ACCOUNT_TYPE } from './utils/constants';
+import { setCourse, setStep, setEditCourse } from './slices/courseSlice';
 
 function App() {
   const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.profile);
   function isTokenExpired() {
     const token = localStorage.getItem('token');
     if (!token) return true;
@@ -52,6 +55,21 @@ function App() {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    const existing = localStorage.getItem('course');
+    if (existing) {
+      dispatch(setCourse(JSON.parse(existing)));
+    }
+    const existingStep = localStorage.getItem('step');
+    if (existingStep) {
+      dispatch(setStep(existingStep));
+    }
+    const existingEdit = localStorage.getItem('editCourse');
+    if (existingEdit) {
+      dispatch(setEditCourse(existingEdit));
+    }
+  });
+
   return (
     <div className="w-full min-h-screen bg-richblack-900 flex flex-col font-inter">
       <NavBar />
@@ -77,12 +95,18 @@ function App() {
         >
           <Route path="/dashboard/my-profile" element={<Profile />} />
           <Route path="/dashboard/settings" element={<Settings />} />
-          <Route
-            path="/dashboard/enrolled-courses"
-            element={<EnrolledCourses />}
-          />
-          <Route path="/dashboard/cart" element={<Cart />} />
-          
+          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <>
+              <Route
+                path="/dashboard/enrolled-courses"
+                element={<EnrolledCourses />}
+              />
+              <Route path="/dashboard/cart" element={<Cart />} />
+            </>
+          )}
+          {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
+            <Route path="/dashboard/add-course" element={<AddCourses />} />
+          )}
         </Route>
         <Route path="*" element={<Error />} />
       </Routes>

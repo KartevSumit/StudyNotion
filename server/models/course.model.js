@@ -37,9 +37,7 @@ const courseSchema = new mongoose.Schema({
   thumbnail: {
     type: String,
   },
-  tags: {
-    type: String,
-  },
+  tags: [{ type: String }],
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Category',
@@ -50,6 +48,11 @@ const courseSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
+    },
+  ],
+  requirements: [
+    {
+      type: String,
     },
   ],
 });

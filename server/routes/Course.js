@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const upload = require('../middleware/multer');
+
 const {
   auth,
   isAdmin,
@@ -35,13 +37,31 @@ const {
 } = require('../controllers/RatingandReview');
 
 // post routes
-router.post('/createCourse', auth, isInstructor, createCourse);
+router.post(
+  '/createCourse',
+  auth,
+  isInstructor,
+  upload.single('thumbnail'),
+  createCourse
+);
 router.post('/createSection', auth, isInstructor, createSection);
-router.post('/updateSection', auth, isInstructor, updateSection);
-router.post('/deleteSection', auth, isInstructor, deleteSection);
-router.post('/createSubSection', auth, isInstructor, createSubSection);
-router.post('/updateSubSection', auth, isInstructor, updateSubSection);
-router.post('/deleteSubSection', auth, isInstructor, deleteSubSection);
+router.put('/updateSection', auth, isInstructor, updateSection);
+router.delete('/deleteSection', auth, isInstructor, deleteSection);
+router.post(
+  '/createSubSection',
+  auth,
+  isInstructor,
+  upload.single('video'),
+  createSubSection
+);
+router.put(
+  '/updateSubSection',
+  auth,
+  isInstructor,
+  upload.single('video'),
+  updateSubSection
+);
+router.delete('/deleteSubSection', auth, isInstructor, deleteSubSection);
 router.post('/createCategory', auth, isAdmin, createCategory);
 router.post('/createRatingAndReview', auth, isStudent, createRatingAndReview);
 

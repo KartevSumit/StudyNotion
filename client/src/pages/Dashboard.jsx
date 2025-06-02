@@ -7,7 +7,8 @@ import Spinner from '../components/common/Spinner';
 function Dashboard() {
   const { loading: authloading } = useSelector((state) => state.auth);
   const { loading: profileloading } = useSelector((state) => state.profile);
-  if (authloading || profileloading) {
+  const { loading: courseloading } = useSelector((state) => state.course);
+  if (authloading || profileloading || courseloading) {
     return <Spinner />;
   }
   return (

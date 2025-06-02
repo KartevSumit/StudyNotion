@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import logo from '../../assets/Logo/Logo-Full-Light.png';
 import { NavbarLinks } from '../../data/navbar-links';
 import { Link, useLocation } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { setLoading } from '../../slices/authSlice';
 import { TfiMenuAlt } from 'react-icons/tfi';
 import useClickOutside from '../../hooks/useOnClickOutside';
 import useNavColor from '../../hooks/useNavColor';
+import { setCategories } from '../../slices/courseSlice';
 
 export default function NavBar() {
   const { token } = useSelector((s) => s.auth);
@@ -40,22 +41,23 @@ export default function NavBar() {
     setShowDropdown(false);
   });
 
-  const Render = async () => {
+  const fetchSublinks = useCallback(async () => {
     dispatch(setLoading(true));
     try {
       const res = await apiConnector('GET', COURSE_API.GET_ALL_CATEGORIES);
-      setSublinks(res.data.data || []);
+      const categories = res.data.data || [];
+      setSublinks(categories);
+      dispatch(setCategories(categories));
     } catch (err) {
-      console.error('Error fetching sublinks:', err);
+      console.error('Error fetching categories:', err);
     } finally {
       dispatch(setLoading(false));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
-    Render();
-    // eslint-disable-next-line
-  }, []);
+    fetchSublinks();
+  }, [fetchSublinks]);
 
   const location = useLocation();
   const matchRoute = (path) => location.pathname === path;
