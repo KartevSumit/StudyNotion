@@ -6,14 +6,14 @@ const { fileUploader2 } = require('../utils/fileUploader');
 exports.createCourse = async (req, res) => {
   try {
     const userID = req.user._id;
-    const { 
-      courseName, 
-      courseDescription, 
-      whatyouwilllearn, 
-      price, 
-      category, 
-      tags, 
-      requirements 
+    const {
+      courseName,
+      courseDescription,
+      whatyouwilllearn,
+      price,
+      category,
+      tags,
+      requirements,
     } = req.body;
     const thumbnail = req.file;
 
@@ -52,21 +52,31 @@ exports.createCourse = async (req, res) => {
     }
 
     let processedTags, processedRequirements;
-    
+
     try {
       processedTags = Array.isArray(tags) ? tags : JSON.parse(tags);
     } catch (error) {
-      processedTags = typeof tags === 'string' 
-        ? tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-        : [];
+      processedTags =
+        typeof tags === 'string'
+          ? tags
+              .split(',')
+              .map((tag) => tag.trim())
+              .filter((tag) => tag.length > 0)
+          : [];
     }
-    
+
     try {
-      processedRequirements = Array.isArray(requirements) ? requirements : JSON.parse(requirements);
+      processedRequirements = Array.isArray(requirements)
+        ? requirements
+        : JSON.parse(requirements);
     } catch (error) {
-      processedRequirements = typeof requirements === 'string'
-        ? requirements.split(',').map(req => req.trim()).filter(req => req.length > 0)
-        : [];
+      processedRequirements =
+        typeof requirements === 'string'
+          ? requirements
+              .split(',')
+              .map((req) => req.trim())
+              .filter((req) => req.length > 0)
+          : [];
     }
 
     const thumbnailImage = await fileUploader2(thumbnail, process.env.FOLDER);
@@ -238,6 +248,43 @@ exports.editCourseDetails = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error in updating course',
+      error: error.message,
+    });
+  }
+};
+
+exports.publishCourse = async (req, res) => {
+  try {
+    console.log(req.body);
+    const { courseId, status } = req.body;
+
+    if (!courseId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide course id',
+      });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(400).json({
+        success: false,
+        message: 'Course not found',
+      });
+    }
+
+    course.status = status;
+    await course.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Course published successfully',
+      data: course,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error in publishing course',
       error: error.message,
     });
   }

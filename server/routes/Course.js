@@ -14,6 +14,7 @@ const {
   createCourse,
   getAllCourses,
   getCourseDetails,
+  publishCourse,
 } = require('../controllers/Course');
 const {
   createSection,
@@ -44,6 +45,7 @@ router.post(
   upload.single('thumbnail'),
   createCourse
 );
+router.put('/publishCourse', auth, isInstructor, publishCourse);
 router.post('/createSection', auth, isInstructor, createSection);
 router.put('/updateSection', auth, isInstructor, updateSection);
 router.delete('/deleteSection', auth, isInstructor, deleteSection);

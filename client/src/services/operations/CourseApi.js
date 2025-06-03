@@ -71,3 +71,41 @@ export async function addCourseDetails(data, token) {
   return result;
 }
 
+export async function getCourseDetails() {
+  let result = null;
+  try {
+    const response = await apiConnector('GET', COURSE_API.GET_COURSE);
+    if (!response?.data?.success) {
+      throw new Error('Could not fetch course details');
+    } else {
+      result = response?.data?.data;
+    }
+  } catch (error) {
+    console.log('error', error);
+    toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  return result;
+}
+
+export function publishCourse(data, token) {
+  return async (dispatch) => {
+    let result = null;
+    try {
+      const response = await apiConnector(
+        'PUT',
+        COURSE_API.PUBLISH_COURSE,
+        data,
+        { Authorization: `Bearer ${token}` }
+      );
+      if (!response?.data?.success) {
+        throw new Error('Could not publish course');
+      } else {
+        result = response?.data?.data;
+      }
+    } catch (error) {
+      console.log('error', error);
+      toast.error(error?.response?.data?.message || 'Something went wrong.');
+    }
+    return result;
+  };
+}

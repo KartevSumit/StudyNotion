@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { TiTick } from 'react-icons/ti';
 import CourseInformationForm from './CourseInformation/CourseInformationForm';
 import CourseBuildingForm from './CourseBuilder/CourseBuildingForm';
-import PublishForm from './PublishForm';
+import PublishForm from './Publish/PublishForm';
 
 function RenderSteps() {
   const { course,step } = useSelector((state) => state.course);

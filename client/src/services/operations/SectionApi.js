@@ -7,7 +7,7 @@ export const updateSection = async (data, token) => {
   let result = null;
   const toastId = toast.loading('Loading...');
   try {
-    const res = await apiConnector('POST', COURSE_API.UPDATE_SECTION, data, {
+    const res = await apiConnector('PUT', COURSE_API.UPDATE_SECTION, data, {
       Authorization: `Bearer ${token}`,
     });
     result = res?.data?.data;

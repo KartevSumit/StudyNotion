@@ -17,6 +17,7 @@ export const COURSE_API = {
   CREATE_COURSE: BASE_URL + API_VERSION + '/course/createCourse',
   GET_ALL_COURSES: BASE_URL + API_VERSION + '/course/getAllCourses',
   GET_COURSE_DETAILS: BASE_URL + API_VERSION + '/course/getCourseDetails',
+  PUBLISH_COURSE: BASE_URL + API_VERSION + '/course/publishCourse',
   CREATE_SECTION: BASE_URL + API_VERSION + '/course/createSection',
   UPDATE_SECTION: BASE_URL + API_VERSION + '/course/updateSection',
   DELETE_SECTION: BASE_URL + API_VERSION + '/course/deleteSection',

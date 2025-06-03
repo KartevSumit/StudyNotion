@@ -10,11 +10,10 @@ function AddCourses() {
           <RenderSteps></RenderSteps>
         </div>
       </div>
-      <div className="w-[30%] h-fit p-8 bg-richblack-800">
-        <h1 className="text-2xl font-semibold text-richblack-5">
-          ⚡Course Upload Tips
+      <div className="w-[30%] h-fit px-8 py-6 bg-richblack-800 flex flex-col gap-4 items-start rounded-lg mt-8">
+        <h1 className="text-2xl font-semibold text-richblack-5">⚡Course Upload Tips
         </h1>
-        <ul className=" text-richblack-5 font-medium">
+        <ul className="list-disc text-richblack-5 font-medium flex flex-col gap-2">
           <li>Set the Course Price option or make it free.</li>
           <li>Standard size for the course thumbnail is 1024x576.</li>
           <li>Video section controls the course overview video.</li>

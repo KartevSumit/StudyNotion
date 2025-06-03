@@ -55,6 +55,16 @@ const courseSchema = new mongoose.Schema({
       type: String,
     },
   ],
+  status: {
+    type: String,
+    enum: ['Published', 'Draft'],
+    default: 'Draft',
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Course = mongoose.model('Course', courseSchema);

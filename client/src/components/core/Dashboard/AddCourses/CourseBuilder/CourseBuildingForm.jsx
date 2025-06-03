@@ -63,8 +63,8 @@ function CourseBuildingForm() {
     if (editSectionName) {
       result = await updateSection(
         {
-          SectionName: data.sectionname,
-          SectionId: editSectionName,
+          sectionName: data.sectionname,
+          sectionId: editSectionName,
           courseId: course._id,
         },
         token

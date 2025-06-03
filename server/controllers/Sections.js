@@ -50,7 +50,7 @@ exports.createSection = async (req, res) => {
 
 exports.updateSection = async (req, res) => {
   try {
-    const { sectionName, sectionId } = req.body;
+    const { sectionName, sectionId, courseId } = req.body;
 
     if (!sectionName || !sectionId) {
       return res.status(400).json({
@@ -67,7 +67,7 @@ exports.updateSection = async (req, res) => {
       { new: true }
     );
 
-    const updatedCourse = await Course.findById(updatedSection.courseId);
+    const updatedCourse = await Course.findById(courseId);
     await updatedCourse.populate({
       path: 'courseContent',
       populate: {
