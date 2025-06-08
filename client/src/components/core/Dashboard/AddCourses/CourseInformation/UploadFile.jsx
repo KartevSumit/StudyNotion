@@ -166,7 +166,7 @@ const UploadFile = ({
     });
 
   return (
-    <div className="w-full min-h-[30vh]">
+    <div className="w-full min-h-[10vh] lg:min-h-[30vh] ">
       <div
         {...getRootProps()}
         className={`
@@ -183,12 +183,16 @@ const UploadFile = ({
         {previewUrl ? (
           <div className="w-full h-full flex flex-col items-center justify-center gap-6">
             {isVideoUrl(previewUrl) ? (
-              <video src={previewUrl} controls className="h-60 rounded-md" />
+              <video
+                src={previewUrl}
+                controls
+                className="h-32 lg:h-60 rounded-md"
+              />
             ) : (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="h-60 object-cover rounded-md"
+                className="h-32 object-cover rounded-md"
               />
             )}
             {!disabled && (
@@ -206,25 +210,29 @@ const UploadFile = ({
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-6 font-semibold">
             <input {...getInputProps()} disabled={disabled} />
-            <div className="flex items-center justify-center w-14 h-14 rounded-full bg-richblack-900">
-              <FiUploadCloud className="text-3xl text-yellow-50" />
+            <div className="flex items-center justify-center w-10 h-10 lg:w-14 lg:h-14 rounded-full bg-richblack-900">
+              <FiUploadCloud className="text-lg lg:text-3xl text-yellow-50" />
             </div>
             {disabled ? (
-              <p className="text-richblack-400 text-lg">File upload disabled</p>
+              <p className="text-richblack-400 text-sm sm:text-lg">
+                File upload disabled
+              </p>
             ) : isDragActive ? (
-              <p className="text-richblack-200 text-lg">Drop the file here …</p>
+              <p className="text-richblack-200 text-sm sm:text-lg">
+                Drop the file here …
+              </p>
             ) : (
               <div className="w-full flex flex-col items-center justify-center gap-6">
                 <div className="w-full">
-                  <p className="text-richblack-200 text-lg">
+                  <p className="text-richblack-200 text-sm sm:text-lg">
                     Drag and drop an image or video, or{' '}
                     <span className="text-yellow-50">Browse</span>
                   </p>
-                  <p className="text-richblack-200 text-lg">
+                  <p className="text-richblack-200 text-sm sm:text-lg">
                     Max 6 MB each (12 MB for videos)
                   </p>
                 </div>
-                <ul className="flex list-disc list-inside w-[80%] items-center justify-between text-richblack-300 text-lg">
+                <ul className="flex list-disc list-inside flex-col sm:flex-row sm:w-[80%] items-center justify-between text-richblack-300 text-sm sm:text-lg">
                   <li>Aspect ratio 16:9</li>
                   <li>Recommended size 1920 x 1080</li>
                 </ul>

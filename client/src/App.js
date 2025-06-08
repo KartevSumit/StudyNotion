@@ -23,8 +23,11 @@ import Settings from './pages/Dashboard/Settings';
 import EnrolledCourses from './pages/Dashboard/EnrolledCourse';
 import Cart from './pages/Dashboard/Cart';
 import AddCourses from './pages/Dashboard/AddCourses';
+import MyCourse from './pages/Dashboard/MyCourse';
 import { ACCOUNT_TYPE } from './utils/constants';
 import { setCourse, setStep, setEditCourse } from './slices/courseSlice';
+import Catelog from './pages/Catelog';
+import CourseDetails from './pages/CourseDetails';
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +88,8 @@ function App() {
         <Route path="/successChange" element={<SuccessChange />} />
         <Route path="/about" element={<Aboutus />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/catalog/:catelogName" element={<Catelog />} />
+        <Route path='/course/:courseId' element={<CourseDetails />} />
 
         <Route
           element={
@@ -105,7 +110,10 @@ function App() {
             </>
           )}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
-            <Route path="/dashboard/add-course" element={<AddCourses />} />
+            <>
+              <Route path="/dashboard/add-course" element={<AddCourses />} />
+              <Route path="/dashboard/my-courses" element={<MyCourse />} />
+            </>
           )}
         </Route>
         <Route path="*" element={<Error />} />

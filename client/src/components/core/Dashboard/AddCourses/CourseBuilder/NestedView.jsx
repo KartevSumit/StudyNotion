@@ -84,11 +84,11 @@ function NestedView({ handleChangeSectionName }) {
       <div className="w-full flex flex-col gap-2 text-richblack-300 text-lg">
         {course?.courseContent?.map((section) => (
           <details key={section._id} className="custom-details" open>
-            <summary className="w-full flex p-2 border-b-4 border-richblack-600 hover:border-richblack-500 transition-colors group">
+            <summary className="w-full flex sm:p-2 py-1 border-b-4 border-richblack-600 hover:border-richblack-500 transition-colors group">
               <div className="w-full flex items-center justify-between gap-2">
                 <div className="flex items-center gap-4">
                   <TbListDetails className="text-yellow-50" />
-                  <h1 className="text-richblack-50 font-semibold group-hover:text-richblack-5">
+                  <h1 className="text-richblack-50 font-semibold group-hover:text-richblack-5 overflow-x-auto">
                     {section.sectionName}
                   </h1>
                 </div>
@@ -96,13 +96,13 @@ function NestedView({ handleChangeSectionName }) {
                   <MdOutlineEdit
                     className="cursor-pointer text-richblack-200 hover:text-yellow-50 transition-colors"
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent details toggle
+                      e.stopPropagation();
                       handleChangeSectionName(section._id, section.sectionName);
                     }}
                   />
                   <RiDeleteBin6Line
                     onClick={(e) => {
-                      e.stopPropagation(); // Prevent details toggle
+                      e.stopPropagation();
                       setConfirmationModal({
                         heading: 'Delete Section',
                         description:
@@ -132,7 +132,7 @@ function NestedView({ handleChangeSectionName }) {
               </div>
             </summary>
 
-            <div className="px-8 flex flex-col items-start ">
+            <div className="sm:px-8 px-3 flex flex-col items-start ">
               {section.subSections?.map((subSection) => (
                 <div
                   key={subSection._id}

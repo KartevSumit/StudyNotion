@@ -6,6 +6,7 @@ import { setCourse } from '../../../../../slices/courseSlice';
 import { COURSE_STATUS } from '../../../../../utils/constants';
 import { setStep, setLoading } from '../../../../../slices/courseSlice';
 import { publishCourse } from '../../../../../services/operations/CourseApi';
+import { useNavigate } from 'react-router-dom';
 
 export const PublishForm = () => {
   const {
@@ -23,16 +24,17 @@ export const PublishForm = () => {
     }
   }, [reset]);
 
-  const { loading } = useSelector((state) => state.course);
   const { course } = useSelector((state) => state.course);
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   const GoToCourse = () => {
     dispatch(setCourse(null));
     dispatch(setStep(1));
     localStorage.setItem('step', 1);
     localStorage.removeItem('course');
+    navigate('/dashboard/my-courses');
   };
 
   const handleCoursePublish = async () => {

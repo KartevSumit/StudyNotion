@@ -6,7 +6,7 @@ import CourseBuildingForm from './CourseBuilder/CourseBuildingForm';
 import PublishForm from './Publish/PublishForm';
 
 function RenderSteps() {
-  const { course,step } = useSelector((state) => state.course);
+  const { course, step } = useSelector((state) => state.course);
 
   useEffect(() => {
     console.log('step', step);
@@ -29,7 +29,7 @@ function RenderSteps() {
   ];
 
   return (
-    <div className="w-full min-h-full flex flex-col items-center p-8">
+    <div className="w-full flex flex-col items-center lg:p-8 p-2">
       <div className="w-full flex items-center justify-center gap-2">
         {steps.map((item) => (
           <div className="h-fit flex items-center gap-2" key={item.id}>
@@ -54,18 +54,27 @@ function RenderSteps() {
               </h1>
             </div>
             {item.id != 3 && (
-              <div
-                className={`text-richblack-300 text-3xl ${
-                  step > item.id && 'text-yellow-25'
-                }`}
-              >
-                -----------
-              </div>
+              <>
+                <div
+                  className={`hidden sm:block text-richblack-300 text-3xl ${
+                    step > item.id && 'text-yellow-25'
+                  }`}
+                >
+                  ----------
+                </div>
+                <div
+                  className={`sm:hidden text-richblack-300 text-3xl ${
+                    step > item.id && 'text-yellow-25'
+                  }`}
+                >
+                  -----
+                </div>
+              </>
             )}
           </div>
         ))}
       </div>
-      <div className="w-full mt-14 min-h-fit p-12">
+      <div className="w-full lg:mt-14 min-h-fit lg:p-12 mt-16">
         {step == 1 && <CourseInformationForm />}
         {step == 2 && <CourseBuildingForm />}
         {step == 3 && <PublishForm />}

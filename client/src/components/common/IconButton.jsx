@@ -11,7 +11,7 @@ function IconButton({
 }) {
   return (
     <button
-      className="inline-block text-lg"
+      className="inline-block text-sm lg:text-lg"
       disabled={disabled}
       onClick={onClick}
       type={type}

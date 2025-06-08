@@ -15,6 +15,12 @@ import { TfiMenuAlt } from 'react-icons/tfi';
 import useClickOutside from '../../hooks/useOnClickOutside';
 import useNavColor from '../../hooks/useNavColor';
 import { setCategories } from '../../slices/courseSlice';
+import { sidebarLinks } from '../../data/dashboard-links';
+import { CiSettings } from 'react-icons/ci';
+import { IoIosLogOut } from 'react-icons/io';
+import ConfirmationModal from '../common/ConfirmationModal';
+import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../services/operations/AuthApi';
 
 export default function NavBar() {
   const { token } = useSelector((s) => s.auth);
@@ -30,6 +36,20 @@ export default function NavBar() {
   const dispatch = useDispatch();
   const menuRef = useRef(null);
   const dropdownRef = useRef(null);
+  const [ShowDashboard, setShowDashboard] = useState(false);
+  const [Modal, setModal] = useState(null);
+  const navigate = useNavigate();
+
+  const link = {
+    head: 'Settings',
+    icon: <CiSettings className="text-lg" />,
+    value: 'settings',
+  };
+  const setting = {
+    head: 'Logout',
+    icon: <IoIosLogOut className="text-lg" />,
+    value: 'Logout',
+  };
 
   useClickOutside(dropdownRef, () => {
     setShowDropdown(false);
@@ -60,7 +80,12 @@ export default function NavBar() {
   }, [fetchSublinks]);
 
   const location = useLocation();
-  const matchRoute = (path) => location.pathname === path;
+  const matchRoute = (path) => {
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname.startsWith(path);
+  };
 
   const handleMotion = (e, idx) => {
     const rect = itemRefs.current[idx].getBoundingClientRect();
@@ -86,6 +111,12 @@ export default function NavBar() {
     setHovered(false);
     setShowMenu(false);
   };
+
+  const [path, setpath] = useState('/dashboard/my-profile');
+
+  useEffect(() => {
+    setpath(location.pathname);
+  }, [location]);
 
   const { loading } = useSelector((state) => state.auth);
   const NavColor = useNavColor();
@@ -137,8 +168,9 @@ export default function NavBar() {
               >
                 {sublinks.length > 0 &&
                   sublinks.map((item, idx) => (
-                    <div
+                    <Link
                       key={item._id}
+                      to={`/catalog/${item._id}`}
                       ref={(el) => (itemRefs.current[idx] = el)}
                       onMouseMove={(e) => handleMotion(e, idx)}
                       onMouseLeave={handleLeave}
@@ -164,7 +196,7 @@ export default function NavBar() {
                           style={{ left: position.x, top: position.y }}
                         />
                       )}
-                    </div>
+                    </Link>
                   ))}
               </div>
             </div>
@@ -172,7 +204,7 @@ export default function NavBar() {
         )}
       </div>
 
-      <div className="hidden h-full lg:flex gap-4 items-center">
+      <div className="hidden h-full lg:flex gap-4 items-center relative">
         {user?.accountType === 'Student' && (
           <Link to="/dashboard/cart" className="relative p-2">
             <FaCartShopping className="text-2xl text-richblack-5" />
@@ -223,15 +255,77 @@ export default function NavBar() {
           </Link>
         )}
         {token && (
-          <Link to="/dashboard/my-profile" className="m-auto w-10 h-10">
-            <button className="w-10 h-10 rounded-full overflow-hidden m-auto">
+          <div className="relative flex items-center justify-center">
+            <button
+              className="w-10 h-10 rounded-full overflow-hidden m-auto"
+              onClick={() => setShowDashboard(!ShowDashboard)}
+            >
               <img
                 src={user?.image}
                 alt="Profile"
                 className="w-full h-full object-cover object-center rounded-full"
               />
             </button>
-          </Link>
+            {ShowDashboard && (
+              <div className="absolute border-2 border-dashed border-blue-400 w-48 flex flex-col items-center justify-center top-12 bg-richblack-700 z-50 left-1/2 -translate-x-1/2 py-4">
+                {sidebarLinks.map(
+                  (link) =>
+                    (link.type === undefined ||
+                      user.accountType === link.type) && (
+                      <Link
+                        key={link.name}
+                        to={link.path}
+                        onClick={() => setShowDashboard(false)}
+                        className={`w-full items-center pl-8 p-1 justify-start gap-3 flex ${
+                          path === link.path
+                            ? 'text-yellow-25 pl-7 bg-yellow-800 border-l-4 border-yellow-25'
+                            : 'text-richblack-200'
+                        }`}
+                      >
+                        {link.icon}
+                        <h1>{link.name}</h1>
+                      </Link>
+                    )
+                )}
+                <div className="w-full flex flex-col items-start py-2">
+                  <Link
+                    to={`/dashboard/${link.value}`}
+                    onClick={() => setShowDashboard(false)}
+                    className={`w-full items-center pl-8 p-1 justify-start gap-3 flex ${
+                      path === `/dashboard/${link.value}`
+                        ? 'text-yellow-25 pl-7 bg-yellow-800 border-l-4 border-yellow-25'
+                        : 'text-richblack-200'
+                    }`}
+                  >
+                    {link.icon}
+                    <h1>{link.head}</h1>
+                  </Link>
+                  <button
+                    className={`w-full items-center pl-8 p-1 justify-start gap-3 flex text-richblack-200`}
+                    onClick={() => {
+                      setModal({
+                        heading: 'Are you sure?',
+                        description: 'You will be logged out of your account',
+                        text1: 'Logout',
+                        text2: 'Cancel',
+                        customClass1: `bg-yellow-100`,
+                        customClass2: `bg-richblack-400`,
+                        onClick2: () => setModal(null),
+                        onClick1: () => {
+                          dispatch(logoutUser(navigate));
+                          setModal(null);
+                        },
+                      });
+                      setShowDashboard(false);
+                    }}
+                  >
+                    {setting.icon}
+                    <h1>{setting.head}</h1>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         )}
         <button
           onClick={() => setShowMenu(!showMenu)}
@@ -348,6 +442,7 @@ export default function NavBar() {
           </div>
         </div>
       )}
+      {Modal && <ConfirmationModal modalData={Modal} />}
     </div>
   );
 }

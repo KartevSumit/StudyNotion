@@ -26,10 +26,11 @@ export function getCourseCategories() {
 
 export async function editCourseDetails(data, token) {
   let result = null;
+  console.log('data', data);
   try {
     const response = await apiConnector(
-      'POST',
-      COURSE_API.UPDATE_SECTION,
+      'PUT',
+      COURSE_API.EDIT_COURSE_DETAILS,
       data,
       { Authorization: `Bearer ${token}` }
     );
@@ -71,10 +72,16 @@ export async function addCourseDetails(data, token) {
   return result;
 }
 
-export async function getCourseDetails() {
+export async function getCourseDetails({ courseId }) {
   let result = null;
   try {
-    const response = await apiConnector('GET', COURSE_API.GET_COURSE);
+    const response = await apiConnector(
+      'GET',
+      COURSE_API.GET_COURSE,
+      null,
+      null,
+      { courseId }
+    );
     if (!response?.data?.success) {
       throw new Error('Could not fetch course details');
     } else {
@@ -108,4 +115,67 @@ export function publishCourse(data, token) {
     }
     return result;
   };
+}
+
+export async function getInstructorCourses(token) {
+  let result = null;
+  try {
+    const response = await apiConnector(
+      'GET',
+      COURSE_API.GET_INSTRUCTOR_COURSES,
+      null,
+      { Authorization: `Bearer ${token}` }
+    );
+
+    if (!response?.data?.success) {
+      throw new Error('Could not fetch instructor courses');
+    }
+    result = response.data.data;
+  } catch (error) {
+    console.error('Error in getInstructorCourses:', error);
+    toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  console.log('Instructor Courses:', result);
+  return result;
+}
+
+export async function deleteCourse(data, token) {
+  let result = null;
+  try {
+    const response = await apiConnector(
+      'DELETE',
+      COURSE_API.DELETE_COURSE,
+      data,
+      { Authorization: `Bearer ${token}` }
+    );
+    if (!response?.data?.success) {
+      throw new Error('Could not delete course');
+    }
+  } catch (error) {
+    console.log('error', error);
+    toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  return result;
+}
+
+export async function getCategoryCourses(categoryId) {
+  const toastId = toast.loading('Loading...');
+  let result = null;
+  try {
+    const response = await apiConnector(
+      'GET',
+      `${COURSE_API.GET_CATEGORY_PAGE_DETAILS}`,
+      { categoryId: categoryId }
+    );
+    if (!response?.data?.success) {
+      throw new Error('Could not fetch category courses');
+    }
+    result = response.data.data;
+  } catch (error) {
+    console.error('Error in getCategoryCourses:', error);
+    toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  console.log('Category Courses:', result);
+  toast.dismiss(toastId);
+  return result;
 }

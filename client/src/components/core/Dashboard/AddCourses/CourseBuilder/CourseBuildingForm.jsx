@@ -99,7 +99,7 @@ function CourseBuildingForm() {
   };
 
   return (
-    <div className="w-full p-8 flex flex-col  bg-richblack-800 rounded-xl">
+    <div className="w-full sm:p-8 p-4 flex flex-col bg-richblack-800 rounded-xl">
       <h1 className="text-2xl font-semibold text-richblack-5">
         Course Builder
       </h1>
@@ -107,7 +107,7 @@ function CourseBuildingForm() {
         <div className="flex flex-col gap-6 mt-6 ">
           <label
             htmlFor="Section Name"
-            className="text-richblack-5 text-lg flex flex-col gap-1"
+            className="text-richblack-5 sm:text-lg flex flex-col gap-1"
           >
             <h1>
               Section Name <sup className="text-pink-200">*</sup>
@@ -130,7 +130,7 @@ function CourseBuildingForm() {
               type="submit"
               text={editSectionName ? 'Edit Section Name' : 'Create Section'}
               customClass={
-                'border-2 border-yellow-25 text-yellow-25 text-xl shadow-none'
+                'border-2 border-yellow-25 text-yellow-25 md:text-xl shadow-none'
               }
               children={<GrAddCircle className="text-xl" />}
             />

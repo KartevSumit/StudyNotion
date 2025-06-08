@@ -18,6 +18,10 @@ export const COURSE_API = {
   GET_ALL_COURSES: BASE_URL + API_VERSION + '/course/getAllCourses',
   GET_COURSE_DETAILS: BASE_URL + API_VERSION + '/course/getCourseDetails',
   PUBLISH_COURSE: BASE_URL + API_VERSION + '/course/publishCourse',
+  GET_INSTRUCTOR_COURSES:
+    BASE_URL + API_VERSION + '/course/getInstructorCourses',
+  EDIT_COURSE_DETAILS: BASE_URL + API_VERSION + '/course/editCourseDetails',
+  DELETE_COURSE: BASE_URL + API_VERSION + '/course/deleteCourse',
   CREATE_SECTION: BASE_URL + API_VERSION + '/course/createSection',
   UPDATE_SECTION: BASE_URL + API_VERSION + '/course/updateSection',
   DELETE_SECTION: BASE_URL + API_VERSION + '/course/deleteSection',
@@ -26,7 +30,9 @@ export const COURSE_API = {
   DELETE_SUBSECTION: BASE_URL + API_VERSION + '/course/deleteSubSection',
   CREATE_CATEGORY: BASE_URL + API_VERSION + '/course/createCategory',
   GET_ALL_CATEGORIES: BASE_URL + API_VERSION + '/course/getAllCategories',
-  GET_CATEGORY_PAGE: BASE_URL + API_VERSION + '/course/getCategoryPage',
+  GET_CATEGORY_DETAILS: BASE_URL + API_VERSION + '/course/getcategoryDetails',
+  GET_CATEGORY_PAGE_DETAILS:
+    BASE_URL + API_VERSION + '/course/categoryPageDetails',
   CREATE_RATING_AND_REVIEW:
     BASE_URL + API_VERSION + '/course/createRatingAndReview',
   GET_AVERAGE_RATING: BASE_URL + API_VERSION + '/course/getAverageRating',

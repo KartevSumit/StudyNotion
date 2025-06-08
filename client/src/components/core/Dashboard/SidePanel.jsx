@@ -18,7 +18,7 @@ const setting = {
   value: 'Logout',
 };
 
-function SidePanel() {
+function SidePanel({className}) {
   const location = useLocation();
   const [path, setpath] = useState('/dashboard/my-profile');
   const { user } = useSelector((state) => state.profile);
@@ -33,7 +33,9 @@ function SidePanel() {
   //console.log(path);
 
   return (
-    <div className="w-[15%] h-full bg-richblack-800 flex flex-col items-center">
+    <div
+      className={`min-w-[15%] h-full bg-richblack-800 flex-col items-center ${className}`}
+    >
       <div className="w-full flex flex-col items-start py-6 mt-10">
         {sidebarLinks.map(
           (link) =>

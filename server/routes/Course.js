@@ -15,7 +15,12 @@ const {
   getAllCourses,
   getCourseDetails,
   publishCourse,
+  getInstructorCourses,
+  deleteCourse,
+  editCourseDetails,
+  categoryPageDetails,
 } = require('../controllers/Course');
+
 const {
   createSection,
   updateSection,
@@ -30,6 +35,7 @@ const {
   createCategory,
   getAllCategorys,
   getCategoryPage,
+  getCategoryDetails,
 } = require('../controllers/Category');
 const {
   createRatingAndReview,
@@ -45,10 +51,7 @@ router.post(
   upload.single('thumbnail'),
   createCourse
 );
-router.put('/publishCourse', auth, isInstructor, publishCourse);
 router.post('/createSection', auth, isInstructor, createSection);
-router.put('/updateSection', auth, isInstructor, updateSection);
-router.delete('/deleteSection', auth, isInstructor, deleteSection);
 router.post(
   '/createSubSection',
   auth,
@@ -56,6 +59,35 @@ router.post(
   upload.single('video'),
   createSubSection
 );
+router.post('/createCategory', auth, isAdmin, createCategory);
+router.post('/createRatingAndReview', auth, isStudent, createRatingAndReview);
+
+// get routes
+router.get('/getAllCategories', getAllCategorys);
+router.get('/getCategoryPage', getCategoryPage);
+router.get('/getCategoryDetails', getCategoryDetails);
+router.get('/getAllCourses', getAllCourses);
+router.get('/categoryPageDetails', categoryPageDetails);
+router.get('/getCourseDetails', getCourseDetails);
+router.get('/getAverageRating', getAverageRating);
+router.get('/getAllRating', getAllRating);
+router.get('/getInstructorCourses', auth, isInstructor, getInstructorCourses);
+
+// delete routes
+router.delete('/deleteCourse', auth, isInstructor, deleteCourse);
+router.delete('/deleteSection', auth, isInstructor, deleteSection);
+router.delete('/deleteSubSection', auth, isInstructor, deleteSubSection);
+
+// put routes
+router.put(
+  '/editCourseDetails',
+  auth,
+  isInstructor,
+  upload.single('thumbnail'),
+  editCourseDetails
+);
+router.put('/publishCourse', auth, isInstructor, publishCourse);
+router.put('/updateSection', auth, isInstructor, updateSection);
 router.put(
   '/updateSubSection',
   auth,
@@ -63,16 +95,5 @@ router.put(
   upload.single('video'),
   updateSubSection
 );
-router.delete('/deleteSubSection', auth, isInstructor, deleteSubSection);
-router.post('/createCategory', auth, isAdmin, createCategory);
-router.post('/createRatingAndReview', auth, isStudent, createRatingAndReview);
-
-// get routes
-router.get('/getAllCategories', getAllCategorys);
-router.get('/getCategoryPage', getCategoryPage);
-router.get('/getAllCourses', getAllCourses);
-router.get('/getCourseDetails', getCourseDetails);
-router.get('/getAverageRating', getAverageRating);
-router.get('/getAllRating', getAllRating);
 
 module.exports = router;

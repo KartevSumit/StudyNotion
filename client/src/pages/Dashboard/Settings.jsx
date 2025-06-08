@@ -254,7 +254,7 @@ function Settings() {
   };
 
   return (
-    <div className="w-[85%] min-h-[92vh] flex flex-col gap-10 p-12 overflow-y-auto">
+    <div className="w-full md:w-[85%] min-h-[92vh] flex flex-col gap-10 p-12 overflow-y-auto">
       {confirmDP && <ComfirmationModal modalData={confirmDPModal} />}
       {confirmDelete && <ComfirmationModal modalData={confirmDeleteModal} />}
       {confirmPasswordChange && (
@@ -272,18 +272,18 @@ function Settings() {
           Edit Profile
         </h1>
       </div>
-      <div className="w-[55%] flex flex-col gap-8 ml-20">
+      <div className="w-full md:w-[55%] flex flex-col gap-8 md:ml-20">
         {/* profile picture */}
-        <div className="w-full flex bg-richblack-800 p-8 border border-richblack-600 justify-between items-start rounded-md">
-          <div className="flex items-center gap-8">
+        <div className="w-full flex bg-richblack-800 md:p-8 p-5 border border-richblack-600 justify-between items-start rounded-md">
+          <div className="flex items-center md:gap-8 gap-4">
             <button
-              className="w-20 h-20 rounded-full overflow-hidden bg-richblack-900"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden bg-richblack-900"
               onClick={() => setPreviewImage(true)}
             >
-              <img src={profile.image} alt="" />
+              <img src={profile.image} alt="" className="w-16 md:w-20" />
             </button>
             <div className="flex flex-col gap-2">
-              <h1 className="text-xl text-richblack-5 font-semibold">
+              <h1 className="text:lg md:text-xl text-richblack-5 font-semibold">
                 Change Profile Picture
               </h1>
               <div className="flex gap-4">
@@ -328,7 +328,7 @@ function Settings() {
         </div>
 
         {/* personal information */}
-        <div className="w-full flex flex-col bg-richblack-800 p-8 border border-richblack-600 justify-between items-start rounded-md gap-4">
+        <div className="w-full flex flex-col bg-richblack-800 md:p-8 p-5 border border-richblack-600 justify-between items-start rounded-md gap-4">
           <h1 className="text-2xl text-richblack-25 font-semibold">
             Personal Information
           </h1>
@@ -340,7 +340,7 @@ function Settings() {
                 <input
                   type="text"
                   name="firstName"
-                  className="w-full h-12 p-3 bg-richblack-700 border border-richblack-600 rounded-xl"
+                  className="w-full md:h-12 md:p-3 p-2 bg-richblack-700 border border-richblack-600 rounded-xl"
                   onChange={handleInputChange}
                   value={profile.firstName}
                 />
@@ -350,7 +350,7 @@ function Settings() {
                 <input
                   type="text"
                   name="lastName"
-                  className="w-full h-12 p-3 bg-richblack-700 border border-richblack-600 rounded-xl"
+                  className="w-full md:h-12 md:p-3 p-2 bg-richblack-700 border border-richblack-600 rounded-xl"
                   onChange={handleInputChange}
                   value={profile.lastName}
                 />
@@ -361,22 +361,22 @@ function Settings() {
             </h1>
           </div>
 
-          <div className="w-full flex gap-4 justify-between">
-            <label className="w-[47%] text-richblack-5 flex flex-col gap-2 ">
+          <div className="w-full flex gap-4 justify-between flex-wrap">
+            <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2 ">
               <h1>Date of Birth</h1>
               <input
                 type="date"
                 name="dateofBirth"
-                className="w-full h-12 p-3 bg-richblack-700 border border-richblack-600 rounded-xl flex items-center justify-center"
+                className="w-full md:h-12 md:p-3 p-2 bg-richblack-700 border border-richblack-600 rounded-xl flex items-center justify-center"
                 onChange={handleInfoChange}
                 value={profile.additionalInfo.dateofBirth?.split('T')[0] || ''}
               />
             </label>
-            <div className="w-[47%] text-richblack-5 flex flex-col gap-2">
+            <div className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2">
               <h1>
                 Gender<span className="text-pink-400">*</span>
               </h1>
-              <div className="w-full h-12 p-4 bg-richblack-700 border border-richblack-600 rounded-xl flex items-center gap-8 text-lg">
+              <div className="w-full min-h-12 p-4 bg-richblack-700 border border-richblack-600 rounded-xl flex items-center gap-8 text-lg flex-wrap">
                 {options.map((gen) => (
                   <label key={gen} className="flex items-center gap-2">
                     <div
@@ -416,15 +416,15 @@ function Settings() {
             </div>
           </div>
 
-          <div className="w-full flex gap-4 justify-between">
-            <label className="w-[47%] text-richblack-5 flex flex-col gap-2">
+          <div className="w-full flex gap-4 justify-between flex-wrap">
+            <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2">
               <h1 className="text-normal">
                 Phone Number<span className="text-pink-200">*</span>
               </h1>
               <div className="w-full flex gap-4">
                 <select
                   name="code"
-                  className="w-1/5 h-12 p-2 bg-richblack-700 border border-richblack-600 rounded-xl text-center text-richblack-5"
+                  className="w-3/12 md:w-1/5 h-12 p-2 bg-richblack-700 border border-richblack-600 rounded-xl text-center text-richblack-5"
                   onChange={handlePhoneNumberChange}
                   value={code}
                 >
@@ -450,7 +450,7 @@ function Settings() {
                 />
               </div>
             </label>
-            <label className="w-[47%] text-richblack-5 flex flex-col gap-2">
+            <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2">
               <h1>Profession</h1>
               <select
                 name="profession"
@@ -500,12 +500,12 @@ function Settings() {
         </div>
 
         {/* Change Password */}
-        <div className="w-full flex flex-col bg-richblack-800 p-8 border border-richblack-600 justify-between items-start rounded-md gap-4">
+        <div className="w-full flex flex-col bg-richblack-800 md:p-8 p-5 border border-richblack-600 justify-between items-start rounded-md gap-4">
           <h1 className="text-2xl text-richblack-25 font-semibold">
             Change Password
           </h1>
           <div className="w-full flex flex-col gap-4 text-normal ">
-            <label className="w-[47%] text-richblack-5 flex flex-col gap-2 relative">
+            <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2 relative">
               <h1 className="">Current Password</h1>
               <input
                 type={showCurrentPassword ? 'text' : 'password'}
@@ -527,8 +527,8 @@ function Settings() {
                 )}
               </span>
             </label>
-            <div className="w-full flex justify-between">
-              <label className="w-[47%] text-richblack-5 flex flex-col gap-2 relative">
+            <div className="w-full flex justify-between flex-wrap gap-2">
+              <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2 relative">
                 <h1 className="">New Password</h1>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -550,7 +550,7 @@ function Settings() {
                   )}
                 </span>
               </label>
-              <label className="w-[47%] text-richblack-5 flex flex-col gap-2 relative">
+              <label className="w-full md:w-[47%] text-richblack-5 flex flex-col gap-2 relative">
                 <h1 className="text-normal">Confirm New Password</h1>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
@@ -592,7 +592,7 @@ function Settings() {
         </div>
 
         {/* Delete Account */}
-        <div className="w-full flex bg-pink-900 p-8 border border-pink-700 items-start gap-6 rounded-md">
+        <div className="w-full flex bg-pink-900 md:p-8 p-5 border border-pink-700 items-start gap-6 rounded-md">
           <div className="w-14 flex flex-col gap-4 text-normal ">
             <div className="w-14 h-14 bg-pink-700 rounded-full flex items-center justify-center">
               <RiDeleteBin6Line className="text-pink-200 text-2xl" />
