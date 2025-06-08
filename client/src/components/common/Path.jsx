@@ -5,7 +5,7 @@ function Path({ name }) {
   const { pathname } = useLocation();
   let buttons = pathname.split('/');
 
-  if (buttons[1] === 'catalog') {
+  if (buttons[1] === 'catalog' || buttons[1] === 'course') {
     buttons[2] = name;
   }
 

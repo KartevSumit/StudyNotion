@@ -11,7 +11,6 @@
     "framer-motion": "^12.16.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.511.0",
-    "multer": "^1.4.5-lts.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.3.8",
@@ -22,14 +21,13 @@
     "react-parallax-tilt": "^1.7.291",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.5.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^0.0.0",
     "react-type-animation": "^3.2.0",
     "redux-thunk": "^3.1.0",
     "redux-toolkit": "^1.1.2",
     "styled-components": "^6.1.17",
     "web-vitals": "^2.1.4"
   },
-  "author": "Kartev Sumit",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -57,5 +55,8 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.2.7"
+  },
+  "overrides": {
+    "multer": "^1.4.5-lts.2"
   }
 }

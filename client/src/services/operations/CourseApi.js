@@ -77,7 +77,7 @@ export async function getCourseDetails({ courseId }) {
   try {
     const response = await apiConnector(
       'GET',
-      COURSE_API.GET_COURSE,
+      COURSE_API.GET_COURSE_DETAILS,
       null,
       null,
       { courseId }
