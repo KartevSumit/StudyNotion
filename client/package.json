@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.6.1",
-    "@tailwindcss/line-clamp": "^0.4.4",
     "axios": "^1.8.4",
     "concurrently": "^9.1.2",
     "dotenv": "^16.5.0",
@@ -21,10 +20,9 @@
     "react-parallax-tilt": "^1.7.291",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.5.0",
-    "react-scripts": "^0.0.0",
+    "react-scripts": "^5.0.1",
     "react-type-animation": "^3.2.0",
     "redux-thunk": "^3.1.0",
-    "redux-toolkit": "^1.1.2",
     "styled-components": "^6.1.17",
     "web-vitals": "^2.1.4"
   },
