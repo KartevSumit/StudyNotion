@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import frame from '../../assets/Images/frame.png';
 import auth from '../../assets/Images/AuthInstructor.png';
 import { cloneElement } from 'react';
@@ -13,9 +13,14 @@ function Template({ heading, content1, content2, Form, photo }) {
   const content2text = (Role === 'Student' && content2) || 'Be Unstoppable';
   const image = (Role === 'Student' && photo) || auth;
   const { signupData } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    console.log(Role);
+    dispatch(setSignupData({ ...signupData, accountType: Role }));
+  }, [Role]);
+
   const handleClick = (e) => {
     setRole(e.target.value);
-    dispatch(setSignupData({ ...signupData, accountType: e.target.value }));
     console.log(signupData);
   };
 

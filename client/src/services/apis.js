@@ -54,4 +54,8 @@ export const PROFILE_API = {
   DELETE_CURRENT_IMAGE: BASE_URL + API_VERSION + '/profile/deleteCurrentImage',
   UPDATE_PASSWORD: BASE_URL + API_VERSION + '/profile/updatePassword',
   DELETE_USER: BASE_URL + API_VERSION + '/profile/deleteUser',
+  GET_CART: BASE_URL + API_VERSION + '/profile/getCart',
+  ADD_TO_CART: BASE_URL + API_VERSION + '/profile/addToCart',
+  REMOVE_FROM_CART: BASE_URL + API_VERSION + '/profile/removeFromCart',
+  BUY_COURSE: BASE_URL + API_VERSION + '/profile/buyCourse',
 };

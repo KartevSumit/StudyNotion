@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const upload = require('../middleware/multer');
-const { auth, isAdmin } = require('../middleware/auth');
+const { auth, isAdmin, isStudent } = require('../middleware/auth');
 
 const {
   getAllProfiles,
@@ -11,7 +11,11 @@ const {
   uploadProfileImage,
   deleteCurrentImage,
   updatePassword,
-  deleteUser
+  deleteUser,
+  getCart,
+  addToCart,
+  removeFromCart,
+  buyCourse,
 } = require('../controllers/Profile');
 
 router.get('/getAllProfile', auth, isAdmin, getAllProfiles);
@@ -27,6 +31,9 @@ router.put('/deleteCurrentImage', auth, deleteCurrentImage);
 router.put('/updatePassword', auth, updatePassword);
 router.delete('/deleteUser', auth, deleteUser);
 
-
+router.get('/getCart', auth, isStudent, getCart);
+router.put('/addToCart', auth, isStudent, addToCart);
+router.put('/removeFromCart', auth, isStudent, removeFromCart);
+router.put('/buyCourse', auth, isStudent, buyCourse);
 
 module.exports = router;

@@ -5,8 +5,9 @@ import {
   VscVm,
   VscAdd,
   VscMortarBoard,
-  VscHistory,
 } from 'react-icons/vsc';
+import { FaCartShopping } from 'react-icons/fa6';
+
 export const sidebarLinks = [
   {
     id: 1,
@@ -44,9 +45,9 @@ export const sidebarLinks = [
   },
   {
     id: 6,
-    name: 'Purchase History',
-    path: '/dashboard/purchase-history',
+    name: 'My Wishlist',
+    path: '/dashboard/wishlist',
     type: ACCOUNT_TYPE.STUDENT,
-    icon: <VscHistory className="text-lg" />,
+    icon: <FaCartShopping className="text-lg" />,
   },
 ];

@@ -3,6 +3,7 @@ import { apiConnector } from '../apiConnector';
 import { AUTH_API as auth } from '../apis';
 import { setLoading, setToken, setEmailSent } from '../../slices/authSlice';
 import { setUser } from '../../slices/profileSlice';
+import { setItems } from '../../slices/cartSlice';
 
 export function getPasswordResetToken() {
   return async (dispatch, getState) => {
@@ -97,6 +98,8 @@ export function loginUser(email, password, navigate, role) {
         localStorage.setItem('token', res.data.data.token);
         dispatch(setUser(res.data.data));
         localStorage.setItem('user', JSON.stringify(res.data.data));
+        dispatch(setItems(res.data.data.cart));
+        localStorage.setItem('totalItems', res.data.data.cart.length);
         navigate('/dashboard/my-profile');
       } else {
         throw new Error('Login failed');
@@ -153,6 +156,8 @@ export function signupUser(otp, navigate) {
         localStorage.setItem('token', res.data.data.token);
         dispatch(setUser(res.data.data));
         localStorage.setItem('user', JSON.stringify(res.data.data));
+        dispatch(setItems(res.data.data.cart));
+        localStorage.setItem('totalItems', res.data.data.cart.length);
         navigate('/dashboard/my-profile');
       } else {
         throw new Error('Signup failed');
@@ -174,12 +179,14 @@ export function logoutUser(navigate) {
 
       const res = await apiConnector('POST', auth.LOGOUT, { token });
       if (res.data.success) {
+        navigate('/');
         toast.success('Logout successful');
         dispatch(setToken(null));
         localStorage.removeItem('token');
         dispatch(setUser(null));
         localStorage.removeItem('user');
-        navigate('/');
+        dispatch(setItems([]));
+        localStorage.removeItem('totalItems');
       } else {
         throw new Error('Logout failed');
       }

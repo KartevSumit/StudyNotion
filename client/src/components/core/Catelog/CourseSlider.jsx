@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Card from './Card';
+import Card from '../../common/Card';
 import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
@@ -30,18 +30,18 @@ function CourseSlider({ data, mostPopular }) {
   const slideVariants = {
     enter: (direction) => ({
       x: direction > 0 ? 1000 : -1000,
-      opacity: 0
+      opacity: 0,
     }),
     center: {
       zIndex: 1,
       x: 0,
-      opacity: 1
+      opacity: 1,
     },
     exit: (direction) => ({
       zIndex: 0,
       x: direction < 0 ? 1000 : -1000,
-      opacity: 0
-    })
+      opacity: 0,
+    }),
   };
 
   const swipeConfidenceThreshold = 10000;
@@ -67,8 +67,8 @@ function CourseSlider({ data, mostPopular }) {
       >
         {state !== 0 && <IoIosArrowDropleftCircle size={30} />}
       </button>
-      
-      <div className="w-full overflow-hidden relative h-80">
+
+      <div className="w-full overflow-hidden relative h-[39vh]">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={state}
@@ -78,8 +78,8 @@ function CourseSlider({ data, mostPopular }) {
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 }
+              x: { type: 'spring', stiffness: 300, damping: 30 },
+              opacity: { duration: 0.2 },
             }}
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
@@ -108,7 +108,7 @@ function CourseSlider({ data, mostPopular }) {
           </motion.div>
         </AnimatePresence>
       </div>
-      
+
       <button
         onClick={() => paginate(1)}
         className="w-8 text-richblack-600 absolute -right-10 z-10 hover:text-richblack-400 transition-colors"

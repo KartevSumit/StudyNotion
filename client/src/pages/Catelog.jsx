@@ -6,7 +6,7 @@ import Path from '../components/common/Path';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategoryPage } from '../services/operations/CategoryApi';
 import Spinner from '../components/common/Spinner';
-import Card from '../components/core/Catelog/Card';
+import Card from '../components/common/Card';
 import { setLoading } from '../slices/authSlice';
 
 function Catelog() {

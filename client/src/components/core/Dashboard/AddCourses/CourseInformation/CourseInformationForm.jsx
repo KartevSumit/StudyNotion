@@ -48,7 +48,7 @@ function CourseInformationForm() {
   const courseState = useSelector((state) => state.course);
 
   const { token } = authState;
-  const { categories, course, editCourse, loading, step } = courseState;
+  const { categories, course, editCourse, loading } = courseState;
 
   const courseCategories = useMemo(() => categories || [], [categories]);
 
@@ -246,7 +246,7 @@ function CourseInformationForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="rounded-lg bg-richblack-800 p-6 flex flex-col gap-6 h-[70vh] overflow-y-scroll pb-10"
+      className="rounded-lg bg-richblack-800 p-6 flex flex-col gap-6 h-fit pb-10"
     >
       {/* Course Name */}
       <label htmlFor="courseName" className="flex flex-col w-full gap-2">

@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const Course = require('../models/course.model');
 const Profile = require('../models/profile.model');
 const { fileUploader } = require('../utils/fileUploader');
 const cloudinary = require('cloudinary').v2;
@@ -267,6 +268,144 @@ exports.deleteUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Error in deleting user',
+      error: error.message,
+    });
+  }
+};
+
+exports.addToCart = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    if (user.cart.includes(courseId)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Course already added to cart',
+      });
+    }
+
+    user.cart.push(courseId);
+    await user.save();
+    await user.populate('cart');
+    return res.status(200).json({
+      success: true,
+      message: 'Course added to cart successfully',
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error in adding course to cart',
+      error: error.message,
+    });
+  }
+};
+
+exports.getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate('cart');
+    return res.status(200).json({
+      success: true,
+      message: 'Cart fetched successfully',
+      data: user.cart,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error in fetching cart',
+      error: error.message,
+    });
+  }
+};
+
+exports.removeFromCart = async (req, res) => {
+  try {
+    const { courseId } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+
+    const exists = user.cart.some((id) => id.toString() === courseId);
+    if (!exists) {
+      return res.status(400).json({
+        success: false,
+        message: 'Course not found in cart',
+      });
+    }
+
+    user.cart = user.cart.filter((id) => id.toString() !== courseId);
+
+    await user.save();
+    await user.populate('cart');
+
+    return res.status(200).json({
+      success: true,
+      message: 'Course removed from cart successfully',
+      data: user.cart,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error in removing course from cart',
+      error: error.message,
+    });
+  }
+};
+
+exports.buyCourse = async (req, res) => {
+  try {
+    let { courseId } = req.body;
+    if (!Array.isArray(courseId)) {
+      courseId = [courseId];
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const courseIdStrs = courseId.map(id => id._id.toString());
+
+    user.cart = user.cart.filter(cid => !courseIdStrs.includes(cid.toString()));
+
+    const existingCourseStrs = user.courses.map(cid => cid.toString());
+    const toAdd = courseIdStrs.filter(id => !existingCourseStrs.includes(id));
+    if (toAdd.length > 0) {
+      user.courses.push(...toAdd);
+    }
+
+    await user.save();
+
+    await Course.updateMany(
+      { _id: { $in: toAdd } },
+      { $addToSet: { studentsEnrolled: user._id } }
+    );
+
+    await user.populate(['cart', 'courses']);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Course(s) bought successfully',
+      data: user,     
+    });
+  } catch (error) {
+    console.error('Error in buyCourse:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error in buying course',
       error: error.message,
     });
   }

@@ -22,11 +22,11 @@ function Profile() {
               >
                 <img src={user.image} alt="" />
               </button>
-              <div className="w-12">
+              <div >
                 <h1 className="w-fit text-xl text-richblack-25 font-semibold">
                   {user.firstName} {user.lastName}
                 </h1>
-                <h1 className="lg:text-lg text-richblack-100 overflow-scroll">
+                <h1 className="lg:text-lg text-richblack-100 line-clamp-1">
                   {user.email}
                 </h1>
               </div>

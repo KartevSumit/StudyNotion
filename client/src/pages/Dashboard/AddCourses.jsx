@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 function AddCourses() {
   const { editCourse } = useSelector((state) => state.course);
   return (
-    <div className="w-full h-[92vh] flex overflow-y-scroll flex-col-reverse items-center lg:flex-row lg:items-start">
+    <div className="w-[98%] min-h-[92vh] flex flex-col-reverse items-center lg:flex-row lg:items-start">
       <div className="w-[90%] lg:w-[60%] h-full lg:p-8 p-5">
         <h1 className="text-2xl lg:text-3xl font-semibold text-richblack-5">
           {editCourse ? 'Edit Course' : 'Add Courses'}

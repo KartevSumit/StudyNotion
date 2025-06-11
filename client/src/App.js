@@ -89,7 +89,7 @@ function App() {
         <Route path="/about" element={<Aboutus />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/catalog/:catelogName" element={<Catelog />} />
-        <Route path='/course/:courseId' element={<CourseDetails />} />
+        <Route path="/course/:courseId" element={<CourseDetails />} />
 
         <Route
           element={
@@ -106,7 +106,7 @@ function App() {
                 path="/dashboard/enrolled-courses"
                 element={<EnrolledCourses />}
               />
-              <Route path="/dashboard/cart" element={<Cart />} />
+              <Route path="/dashboard/wishlist" element={<Cart />} />
             </>
           )}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (

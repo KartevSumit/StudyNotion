@@ -4,6 +4,12 @@ import { PROFILE_API as profile } from '../apis';
 import { setSelectedImage, setUser } from '../../slices/profileSlice';
 import { setLoading } from '../../slices/profileSlice';
 import { setToken } from '../../slices/authSlice';
+import {
+  setItems,
+  removeFromCart as remove,
+  clearCart,
+  AddToCart,
+} from '../../slices/cartSlice';
 
 export function getAllProfiles() {
   return async (dispatch, getState) => {
@@ -179,6 +185,95 @@ export function deleteUser(token, navigate) {
       toast.success('Deleted can can be recovered within 7 days');
     } catch (error) {
       toast.error(error?.response?.data?.message || 'Something went wrong.');
+    }
+  };
+}
+
+export function addToCart(token, courseId) {
+  return async (dispatch) => {
+    try {
+      const res = await apiConnector(
+        'PUT',
+        profile.ADD_TO_CART,
+        { courseId },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      dispatch(AddToCart());
+      toast.success('Added to cart successfully');
+    } catch (error) {
+      if (error?.response?.data?.message === 'Unauthorized') {
+        toast.error('Please login to add to cart');
+      } else
+        toast.error(error?.response?.data?.message || 'Something went wrong.');
+    }
+  };
+}
+
+export function removeFromCart(token, courseId) {
+  return async (dispatch) => {
+    try {
+      const res = await apiConnector(
+        'PUT',
+        profile.REMOVE_FROM_CART,
+        { courseId },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      console.log(res.data.data);
+      dispatch(remove());
+      toast.success('Removed from cart successfully');
+    } catch (error) {
+      if (error?.response?.data?.message === 'Unauthorized') {
+        toast.error('Please login first');
+      } else
+        toast.error(error?.response?.data?.message || 'Something went wrong.');
+    }
+  };
+}
+
+export async function getCart(token) {
+  let result = null;
+  try {
+    const res = await apiConnector(
+      'GET',
+      profile.GET_CART,
+      {},
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    result = res.data.data;
+  } catch (error) {
+    if (error?.response?.data?.message === 'Unauthorized') {
+      toast.error('Please login first');
+    } else
+      toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  return result;
+}
+
+export function buyCourse(token, courseId) {
+  return async (dispatch) => {
+    try {
+      const res = await apiConnector(
+        'PUT',
+        profile.BUY_COURSE,
+        { courseId },
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      dispatch(setUser(res.data.data));
+      dispatch(setItems(res.data.data.cart));
+      toast.success('Course bought successfully');
+    } catch (error) {
+      if (error?.response?.data?.message === 'Unauthorized') {
+        toast.error('Please login first');
+      } else
+        toast.error(error?.response?.data?.message || 'Something went wrong.');
     }
   };
 }

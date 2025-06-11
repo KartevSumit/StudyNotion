@@ -53,6 +53,12 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpires: {
     type: Date,
   },
+  cart: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Course',
+    },
+  ],
 });
 
 module.exports = mongoose.model('User', userSchema);

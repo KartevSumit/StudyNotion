@@ -206,10 +206,10 @@ export default function NavBar() {
 
       <div className="hidden h-full lg:flex gap-4 items-center relative">
         {user?.accountType === 'Student' && (
-          <Link to="/dashboard/cart" className="relative p-2">
+          <Link to="/dashboard/wishlist" className="relative p-2">
             <FaCartShopping className="text-2xl text-richblack-5" />
             {totalItems > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+              <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-xs bg-pink-200">
                 {totalItems}
               </span>
             )}
