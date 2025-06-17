@@ -277,3 +277,24 @@ export function buyCourse(token, courseId) {
     }
   };
 }
+
+export async function getInstructorDashboard(token) {
+  let result = null;
+  try {
+    const res = await apiConnector(
+      'GET',
+      profile.GET_INSTRUCTOR_DASHBOARD,
+      {},
+      {
+        Authorization: `Bearer ${token}`,
+      }
+    );
+    result = res.data.data;
+  } catch (error) {
+    if (error?.response?.data?.message === 'Unauthorized') {
+      toast.error('Please login first');
+    } else
+      toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  return result;
+}

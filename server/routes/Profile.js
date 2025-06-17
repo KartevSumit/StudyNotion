@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 const upload = require('../middleware/multer');
-const { auth, isAdmin, isStudent } = require('../middleware/auth');
+const {
+  auth,
+  isAdmin,
+  isStudent,
+  isInstructor,
+} = require('../middleware/auth');
 
 const {
   getAllProfiles,
@@ -16,6 +21,7 @@ const {
   addToCart,
   removeFromCart,
   buyCourse,
+  getInstructorDashboard,
 } = require('../controllers/Profile');
 
 router.get('/getAllProfile', auth, isAdmin, getAllProfiles);
@@ -35,5 +41,11 @@ router.get('/getCart', auth, isStudent, getCart);
 router.put('/addToCart', auth, isStudent, addToCart);
 router.put('/removeFromCart', auth, isStudent, removeFromCart);
 router.put('/buyCourse', auth, isStudent, buyCourse);
+router.get(
+  '/getInstructorDashboard',
+  auth,
+  isInstructor,
+  getInstructorDashboard
+);
 
 module.exports = router;

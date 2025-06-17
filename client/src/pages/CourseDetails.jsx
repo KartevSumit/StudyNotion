@@ -16,6 +16,7 @@ import { addToCart, buyCourse } from '../services/operations/ProfileApi';
 import { WiTime10 } from 'react-icons/wi';
 import ConfirmationModal from '../components/common/ConfirmationModal';
 import { useNavigate } from 'react-router-dom';
+import ReviewSlider from '../components/common/ReviewSlider';
 
 function CourseDetails() {
   const courseId = useParams().courseId;
@@ -241,6 +242,12 @@ function CourseDetails() {
             </Link>
           </div>
         </div>
+      </div>
+      <div className="w-11/12 flex flex-col items-center gap-6 my-12">
+        <h1 className="text-4xl font-semibold text-richblack-5">
+          Reviews from other learners
+        </h1>
+        <ReviewSlider />
       </div>
       <Footer></Footer>
       {showModal && <ConfirmationModal modalData={showModal} />}

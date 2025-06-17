@@ -7,16 +7,13 @@ exports.createRatingAndReview = async (req, res) => {
     const userId = req.user.id;
     const { courseId, rating, review } = req.body;
 
-    // Fixed: Check courseId instead of undefined 'course' variable
     if (!courseId || !userId || !rating || !review) {
       return res.status(401).json({
         success: false,
         message: 'Please fill complete details',
-        // Removed error.message as error is not defined here
       });
     }
 
-    // Fixed: findOne instead of findById and fixed query structure
     const course = await Course.findOne({
       _id: courseId,
       studentsEnrolled: { $elemMatch: { $eq: userId } },
@@ -26,7 +23,6 @@ exports.createRatingAndReview = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'You are not enrolled in this course',
-        // Removed error.message as error is not defined here
       });
     }
 
@@ -39,11 +35,9 @@ exports.createRatingAndReview = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'You have already reviewed this course',
-        // Removed error.message as error is not defined here
       });
     }
 
-    // Fixed: Added course field to RatingAndReview creation
     const newRating = await RatingAndReview.create({
       user: userId,
       course: courseId,
@@ -65,7 +59,6 @@ exports.createRatingAndReview = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Error in updating course',
-        // Removed error.message as error is not defined here
       });
     }
 
@@ -126,6 +119,7 @@ exports.getAllRating = async (req, res) => {
   try {
     const ratings = await RatingAndReview.find({})
       .sort({ rating: 'desc' })
+      .limit(15)
       .populate({ path: 'user', select: 'firstName lastName email image' })
       .populate({ path: 'course', select: 'courseName' })
       .exec();

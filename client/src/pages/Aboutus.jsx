@@ -8,6 +8,7 @@ import Stats from '../components/core/Aboutus/Stats';
 import Footer from '../components/common/Footer';
 import LearningData from '../components/core/Aboutus/LearningData';
 import GetTouch from '../components/core/Aboutus/GetTouch';
+import ReviewSlider from '../components/common/ReviewSlider';
 
 function Aboutus() {
   return (
@@ -178,12 +179,15 @@ function Aboutus() {
 
       {/* 4th section */}
       <div className="w-full min-h-screen flex flex-col items-center">
-        <div className="w-[90%] my-16 mb-36 lg:w-[25%]">
+        <div className="w-[90%] my-16 lg:w-[25%]">
           <GetTouch />
         </div>
-        <h1 className="text-4xl font-semibold text-richblack-5 text-center">
-          Reviews from other learners
-        </h1>
+        <div className="w-11/12 flex flex-col items-center gap-6 mb-16">
+          <h1 className="text-4xl font-semibold text-richblack-5">
+            Reviews from other learners
+          </h1>
+          <ReviewSlider />
+        </div>
       </div>
       {/* 5th section */}
       <Footer />

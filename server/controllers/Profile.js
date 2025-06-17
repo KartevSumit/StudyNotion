@@ -374,17 +374,44 @@ exports.buyCourse = async (req, res) => {
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: 'User not found' });
     }
 
-    const courseIdStrs = courseId.map(id => id._id.toString());
+    const courseIdStrs = courseId.map((id) =>
+      typeof id === 'string' ? id : id._id.toString()
+    );
 
-    user.cart = user.cart.filter(cid => !courseIdStrs.includes(cid.toString()));
+    user.cart = user.cart.filter(
+      (cid) => !courseIdStrs.includes(cid.toString())
+    );
 
-    const existingCourseStrs = user.courses.map(cid => cid.toString());
-    const toAdd = courseIdStrs.filter(id => !existingCourseStrs.includes(id));
+    const existingCourseStrs = user.courses.map((cid) => cid.toString());
+    const toAdd = courseIdStrs.filter((id) => !existingCourseStrs.includes(id));
+
     if (toAdd.length > 0) {
       user.courses.push(...toAdd);
+
+      const courseProgressPromises = toAdd.map(async (courseId) => {
+        const course = await Course.findById(courseId);
+        if (!course) {
+          throw new Error(`Course with ID ${courseId} not found`);
+        }
+
+        return new CourseProgress({
+          courseId: courseId,
+          completedVideos: [],
+        });
+      });
+
+      const newCourseProgress = await Promise.all(courseProgressPromises);
+
+      const savedCourseProgress = await CourseProgress.insertMany(
+        newCourseProgress
+      );
+      const courseProgressIds = savedCourseProgress.map((cp) => cp._id);
+      user.courseProgress.push(...courseProgressIds);
     }
 
     await user.save();
@@ -394,18 +421,53 @@ exports.buyCourse = async (req, res) => {
       { $addToSet: { studentsEnrolled: user._id } }
     );
 
-    await user.populate(['cart', 'courses']);
+    await user.populate([
+      'cart',
+      { path: 'courseProgress', populate: { path: 'courseId' } },
+    ]);
 
     return res.status(200).json({
       success: true,
       message: 'Course(s) bought successfully',
-      data: user,     
+      data: user,
     });
   } catch (error) {
     console.error('Error in buyCourse:', error);
     return res.status(500).json({
       success: false,
       message: 'Error in buying course',
+      error: error.message,
+    });
+  }
+};
+
+exports.getInstructorDashboard = async (req, res) => {
+  try {
+    const courseDetails = await Course.find({ instructor: req.user.id });
+    const courseData = courseDetails.map((course) => {
+      const totalStudents = course.studentsEnrolled.length;
+      const totalRevenue = course.price * totalStudents;
+      const courseDataWithStats = {
+        _id: course._id,
+        courseName: course.courseName,
+        thumbnail: course.thumbnail,
+        courseDescription: course.courseDescription,
+        price: course.price,
+        totalStudents,
+        totalRevenue,
+      };
+      return courseDataWithStats;
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Instructor dashboard fetched successfully',
+      data: courseData,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Error in fetching instructor dashboard',
       error: error.message,
     });
   }

@@ -4,10 +4,43 @@ const Course = require('../models/course.model');
 const { fileUploader2 } = require('../utils/fileUploader');
 require('dotenv').config();
 
+const parseTimeToSeconds = (timeString) => {
+  if (!timeString || typeof timeString !== 'string') return 0;
+
+  const parts = timeString.split(':').map((part) => parseInt(part, 10) || 0);
+  if (parts.length !== 3) return 0;
+
+  const [hours, minutes, seconds] = parts;
+  return hours * 3600 + minutes * 60 + seconds;
+};
+
+const formatSecondsToTime = (totalSeconds) => {
+  if (totalSeconds < 0) totalSeconds = 0;
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
+const addTimeDuration = (currentTime, addTime) => {
+  const currentSeconds = parseTimeToSeconds(currentTime);
+  const addSeconds = parseTimeToSeconds(addTime);
+  return formatSecondsToTime(currentSeconds + addSeconds);
+};
+
+const subtractTimeDuration = (currentTime, subtractTime) => {
+  const currentSeconds = parseTimeToSeconds(currentTime);
+  const subtractSeconds = parseTimeToSeconds(subtractTime);
+  return formatSecondsToTime(currentSeconds - subtractSeconds);
+};
+
 exports.createSubSection = async (req, res) => {
   try {
     const { sectionId, title, timeDuration, description, courseId } = req.body;
-
     const video = req.file;
 
     console.log(sectionId, title, timeDuration, description, video);
@@ -16,6 +49,13 @@ exports.createSubSection = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'All fields required',
+      });
+    }
+
+    if (!/^\d{1,2}:\d{2}:\d{2}$/.test(timeDuration)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid time duration format. Use HH:MM:SS',
       });
     }
 
@@ -36,6 +76,11 @@ exports.createSubSection = async (req, res) => {
       { new: true }
     );
 
+    updatedSection.timeDuration = addTimeDuration(
+      updatedSection.timeDuration || '00:00:00',
+      timeDuration
+    );
+    await updatedSection.save();
     await updatedSection.populate('subSections');
 
     const updatedCourse = await Course.findById(courseId);
@@ -45,6 +90,12 @@ exports.createSubSection = async (req, res) => {
         path: 'subSections',
       },
     });
+
+    updatedCourse.timeDuration = addTimeDuration(
+      updatedCourse.timeDuration || '00:00:00',
+      timeDuration
+    );
+    await updatedCourse.save();
 
     return res.status(200).json({
       success: true,
@@ -63,8 +114,14 @@ exports.createSubSection = async (req, res) => {
 exports.updateSubSection = async (req, res) => {
   try {
     console.log(req.body);
-    const { subsectionId, title, timeDuration, description, courseId } =
-      req.body;
+    const {
+      subsectionId,
+      title,
+      timeDuration,
+      description,
+      sectionId,
+      courseId,
+    } = req.body;
     const video = req.file;
 
     if (!subsectionId || !title || !timeDuration || !description || !courseId) {
@@ -74,8 +131,24 @@ exports.updateSubSection = async (req, res) => {
       });
     }
 
+    if (!/^\d{1,2}:\d{2}:\d{2}$/.test(timeDuration)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid time duration format. Use HH:MM:SS',
+      });
+    }
+
+    const oldSubSection = await SubSection.findById(subsectionId);
+    if (!oldSubSection) {
+      return res.status(404).json({
+        success: false,
+        message: 'Subsection not found',
+      });
+    }
+
+    const oldTimeDuration = oldSubSection.timeDuration;
     let updatedSubSection;
-    
+
     if (video) {
       const response = await fileUploader2(video, process.env.FOLDER);
       updatedSubSection = await SubSection.findByIdAndUpdate(
@@ -99,8 +172,18 @@ exports.updateSubSection = async (req, res) => {
         { new: true }
       );
     }
-    
-    
+
+    const updatedSection = await Section.findById(sectionId);
+    updatedSection.timeDuration = subtractTimeDuration(
+      updatedSection.timeDuration || '00:00:00',
+      oldTimeDuration
+    );
+    updatedSection.timeDuration = addTimeDuration(
+      updatedSection.timeDuration,
+      timeDuration
+    );
+    await updatedSection.save();
+
     const updatedCourse = await Course.findById(courseId);
     await updatedCourse.populate({
       path: 'courseContent',
@@ -108,8 +191,18 @@ exports.updateSubSection = async (req, res) => {
         path: 'subSections',
       },
     });
-    
-    console.log("done");
+
+    updatedCourse.timeDuration = subtractTimeDuration(
+      updatedCourse.timeDuration || '00:00:00',
+      oldTimeDuration
+    );
+    updatedCourse.timeDuration = addTimeDuration(
+      updatedCourse.timeDuration,
+      timeDuration
+    );
+    await updatedCourse.save();
+
+    console.log('done');
     return res.status(200).json({
       success: true,
       message: 'Subsection updated successfully',
@@ -135,7 +228,16 @@ exports.deleteSubSection = async (req, res) => {
       });
     }
 
-    // Remove subsection from section
+    const subsectionToDelete = await SubSection.findById(subsectionId);
+    if (!subsectionToDelete) {
+      return res.status(404).json({
+        success: false,
+        message: 'Subsection not found',
+      });
+    }
+
+    const timeDurationToSubtract = subsectionToDelete.timeDuration;
+
     const updatedSection = await Section.findByIdAndUpdate(
       sectionId,
       {
@@ -143,6 +245,12 @@ exports.deleteSubSection = async (req, res) => {
       },
       { new: true }
     );
+
+    updatedSection.timeDuration = subtractTimeDuration(
+      updatedSection.timeDuration || '00:00:00',
+      timeDurationToSubtract
+    );
+    await updatedSection.save();
 
     const deletedSubSection = await SubSection.findByIdAndDelete(subsectionId);
 
@@ -153,6 +261,12 @@ exports.deleteSubSection = async (req, res) => {
         path: 'subSections',
       },
     });
+
+    updatedCourse.timeDuration = subtractTimeDuration(
+      updatedCourse.timeDuration || '00:00:00',
+      timeDurationToSubtract
+    );
+    await updatedCourse.save();
 
     return res.status(200).json({
       success: true,
@@ -167,3 +281,4 @@ exports.deleteSubSection = async (req, res) => {
     });
   }
 };
+  

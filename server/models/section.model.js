@@ -13,6 +13,11 @@ const sectionSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  timeDuration: {
+    type: String,
+    default: "00:00:00",
+    trim: true,
+  },
 });
 
 const Section = mongoose.model('Section', sectionSchema);

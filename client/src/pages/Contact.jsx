@@ -4,10 +4,11 @@ import { BsGlobeCentralSouthAsia } from 'react-icons/bs';
 import { IoCall } from 'react-icons/io5';
 import ContactUsForm from '../components/core/Forms/ContactUsForm';
 import Footer from '../components/common/Footer';
+import ReviewSlider from '../components/common/ReviewSlider';
 
 function Contact() {
   return (
-    <div className="w-full min-h-[92vh]">
+    <div className="w-full min-h-[92vh] flex flex-col items-center gap-6 justify-center">
       <div className="w-full min-h-[92vh] py-24 flex flex-col lg:flex-row lg:items-start items-center justify-center gap-16">
         <div className="w-[90%] h-[45vh] lg:w-[28vw] lg:h-[22vw] flex flex-col items-center justify-around p-8 bg-richblack-800 rounded-xl">
           <div className="w-full flex flex-col items-end gap-1">
@@ -66,7 +67,12 @@ function Contact() {
           <ContactUsForm />
         </div>
       </div>
-
+      <div className="w-11/12 flex flex-col items-center gap-6 my-12">
+        <h1 className="text-4xl font-semibold text-richblack-5">
+          Reviews from other learners
+        </h1>
+        <ReviewSlider />
+      </div>
       <Footer />
     </div>
   );

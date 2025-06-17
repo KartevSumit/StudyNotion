@@ -132,7 +132,15 @@ exports.SignUp = async (req, res) => {
       additionalInfo: profile._id,
       image: `https://api.dicebear.com/9.x/initials/svg?seed=${firstName} ${lastName}`,
     });
-    await newUser.populate('additionalInfo');
+
+    await newUser.populate([
+      {
+        path: 'courseProgress',
+        populate: { path: 'courseId', populate: { path: 'courseContent' } },
+      },
+      'additionalInfo',
+    ]);
+
     const payload = {
       email: newUser.email,
       id: newUser._id,
@@ -170,7 +178,14 @@ exports.Login = async (req, res) => {
       });
     }
 
-    let user = await User.findOne({ email }).populate('additionalInfo');
+    let user = await User.findOne({ email }).populate([
+      {
+        path: 'courseProgress',
+        populate: { path: 'courseId', populate: { path: 'courseContent' } },
+      },
+      'additionalInfo',
+    ]);
+
     if (!user) {
       user = await DeletedUser.findOne({ email }).populate('additionalInfo');
       if (!user) {
@@ -179,17 +194,23 @@ exports.Login = async (req, res) => {
           message: 'User not found',
         });
       }
-const userDataToRestore = user.toObject();
-      
+      const userDataToRestore = user.toObject();
+
       delete userDataToRestore._id;
       delete userDataToRestore.__v;
       delete userDataToRestore.deletedAt;
-      
+
       await User.create(userDataToRestore);
-      
+
       await DeletedUser.findByIdAndDelete(user._id);
-      
-      user = await User.findOne({ email }).populate('additionalInfo');
+
+      user = await User.findOne({ email }).populate([
+        {
+          path: 'courseProgress',
+          populate: { path: 'courseId', populate: { path: 'courseContent' } },
+        },
+        'additionalInfo',
+      ]);
     }
 
     const payload = {

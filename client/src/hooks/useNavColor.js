@@ -15,6 +15,7 @@ export default function useNavColor() {
     '/dashboard': 'bg-richblack-800',
     '/catalog/:catalogId': 'bg-richblack-800',
     '/course/:courseId': 'bg-richblack-800',
+    '/view-course/:courseId': 'bg-richblack-800',
     default: 'bg-richblack-900',
   };
 
@@ -22,5 +23,6 @@ export default function useNavColor() {
   if (matchRoute('/dashboard/cart')) return map['/dashboard/cart'];
   if (matchRoute('/catalog')) return map['/catalog/:catalogId'];
   if (matchRoute('/course')) return map['/course/:courseId'];
+  if (matchRoute('/view-course')) return map['/view-course/:courseId'];
   return map.default;
 }

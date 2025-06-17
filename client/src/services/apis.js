@@ -37,6 +37,7 @@ export const COURSE_API = {
     BASE_URL + API_VERSION + '/course/createRatingAndReview',
   GET_AVERAGE_RATING: BASE_URL + API_VERSION + '/course/getAverageRating',
   GET_ALL_RATING: BASE_URL + API_VERSION + '/course/getAllRating',
+  ADD_COMPLETED_LECTURE: BASE_URL + API_VERSION + '/course/addCompletedLecture',
 };
 
 // Payment API endpoints
@@ -58,4 +59,6 @@ export const PROFILE_API = {
   ADD_TO_CART: BASE_URL + API_VERSION + '/profile/addToCart',
   REMOVE_FROM_CART: BASE_URL + API_VERSION + '/profile/removeFromCart',
   BUY_COURSE: BASE_URL + API_VERSION + '/profile/buyCourse',
+  GET_INSTRUCTOR_DASHBOARD:
+    BASE_URL + API_VERSION + '/profile/getInstructorDashboard',
 };

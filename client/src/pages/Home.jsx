@@ -21,6 +21,7 @@ import ExploreMore from '../components/core/Home/ExploreMore';
 import Tilt from 'react-parallax-tilt';
 import Spinner from '../components/common/Spinner';
 import { useSelector } from 'react-redux';
+import ReviewSlider from '../components/common/ReviewSlider';
 
 function Home() {
   const { loading } = useSelector((state) => state.auth);
@@ -283,10 +284,11 @@ function Home() {
         </div>
 
         {/* Comments */}
-        <div className="w-11/12 flex flex-col items-center gap-8">
+        <div className="w-11/12 flex flex-col items-center gap-6">
           <h1 className="text-4xl font-semibold text-richblack-5">
             Reviews from other learners
           </h1>
+          <ReviewSlider />
         </div>
 
         {/* Footer */}

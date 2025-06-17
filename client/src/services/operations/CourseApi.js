@@ -179,3 +179,45 @@ export async function getCategoryCourses(categoryId) {
   toast.dismiss(toastId);
   return result;
 }
+
+export async function addReview({ data, token }) {
+  return async (dispatch) => {
+    let result = null;
+    try {
+      const response = await apiConnector(
+        'POST',
+        COURSE_API.CREATE_RATING_AND_REVIEW,
+        data,
+        {
+          Authorization: `Bearer ${token}`,
+        }
+      );
+      if (!response?.data?.success) {
+        throw new Error('Could not add review');
+      } else {
+        result = response?.data?.data;
+      }
+    } catch (error) {
+      console.log('error', error);
+      toast.error(error?.response?.data?.message || 'Something went wrong.');
+    }
+    return result;
+  };
+}
+
+export async function getAllReviews() {
+  let result = null;
+  try {
+    console.log(COURSE_API.GET_ALL_RATING);
+    const response = await apiConnector('GET', COURSE_API.GET_ALL_RATING);
+    if (!response?.data?.success) {
+      throw new Error('Could not fetch all reviews');
+    } else {
+      result = response?.data?.data;
+    }
+  } catch (error) {
+    console.log('error', error);
+    toast.error(error?.response?.data?.message || 'Something went wrong.');
+  }
+  return result;
+}

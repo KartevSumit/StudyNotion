@@ -42,6 +42,9 @@ const {
   getAverageRating,
   getAllRating,
 } = require('../controllers/RatingandReview');
+const {
+  addCompletedLecture,
+} = require('../controllers/CourseProgress');
 
 // post routes
 router.post(
@@ -61,6 +64,7 @@ router.post(
 );
 router.post('/createCategory', auth, isAdmin, createCategory);
 router.post('/createRatingAndReview', auth, isStudent, createRatingAndReview);
+router.post('/addCompletedLecture', auth, isStudent, addCompletedLecture);
 
 // get routes
 router.get('/getAllCategories', getAllCategorys);

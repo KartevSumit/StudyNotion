@@ -65,6 +65,11 @@ const courseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  timeDuration: {
+    type: String,
+    default: '00:00:00',
+    trim: true,
+  },
 });
 
 const Course = mongoose.model('Course', courseSchema);

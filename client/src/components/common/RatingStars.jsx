@@ -5,9 +5,8 @@ import {
   TiStarOutline,
 } from 'react-icons/ti';
 
-function RatingStars({ ratingAndReviews, Star_Size }) {
+function RatingStars({ ratingAndReviews, StarNumber, Star_Size }) {
   const [rating, setRating] = useState(0);
-
   const [starCount, SetStarCount] = useState({
     full: 0,
     half: 0,
@@ -15,42 +14,47 @@ function RatingStars({ ratingAndReviews, Star_Size }) {
   });
 
   useEffect(() => {
-    const CalculateRating = () => {
-      let totalRating = 0;
-      ratingAndReviews.forEach((review) => {
-        totalRating += review.rating;
-      });
-
+    if (StarNumber !== undefined && StarNumber !== null) {
+      setRating(StarNumber);
+    } else if (ratingAndReviews?.length) {
+      const totalRating = ratingAndReviews.reduce(
+        (sum, review) => sum + (review.rating || 0),
+        0
+      );
       setRating(totalRating / ratingAndReviews.length);
-    };
+    }
+  }, [ratingAndReviews, StarNumber]);
 
-    CalculateRating();
-    const wholeStars = Math.floor(rating) || 0;
+  useEffect(() => {
+    if (typeof rating !== 'number' || isNaN(rating)) return;
+
+    const full = Math.floor(rating);
+    const decimal = rating - full;
+    const half = decimal >= 0.25 && decimal <= 0.75 ? 1 : 0;
+    const empty = 5 - full - half;
+
     SetStarCount({
-      full: wholeStars,
-      half: Math.ceil(rating) === Math.round(rating) ? 1 : 0,
-      empty:
-        Math.ceil(rating) === Math.round(rating)
-          ? 4 - wholeStars
-          : 5 - wholeStars,
+      full,
+      half,
+      empty,
     });
-  }, [ratingAndReviews, rating]);
+  }, [rating]);
 
   return (
     <div className="flex gap-4 items-center">
-      <h1>{rating.toFixed(1)}</h1>
+      <h1>{!isNaN(rating) ? rating.toFixed(1) : '0.0'}</h1>
       <div className="flex gap-1 text-yellow-100">
-        {[...new Array(starCount.full)].map((_, i) => {
-          return <TiStarFullOutline key={i} size={Star_Size || 20} />;
-        })}
-        {[...new Array(starCount.half)].map((_, i) => {
-          return <TiStarHalfOutline key={i} size={Star_Size || 20} />;
-        })}
-        {[...new Array(starCount.empty)].map((_, i) => {
-          return <TiStarOutline key={i} size={Star_Size || 20} />;
-        })}
+        {[...Array(Math.max(0, starCount.full))].map((_, i) => (
+          <TiStarFullOutline key={`full-${i}`} size={Star_Size || 20} />
+        ))}
+        {[...Array(Math.max(0, starCount.half))].map((_, i) => (
+          <TiStarHalfOutline key={`half-${i}`} size={Star_Size || 20} />
+        ))}
+        {[...Array(Math.max(0, starCount.empty))].map((_, i) => (
+          <TiStarOutline key={`empty-${i}`} size={Star_Size || 20} />
+        ))}
       </div>
-      <h1>({ratingAndReviews.length} Reviews)</h1>
+      {ratingAndReviews && <h1>({ratingAndReviews?.length || 0} Reviews)</h1>}
     </div>
   );
 }

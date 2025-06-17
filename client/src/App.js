@@ -28,6 +28,9 @@ import { ACCOUNT_TYPE } from './utils/constants';
 import { setCourse, setStep, setEditCourse } from './slices/courseSlice';
 import Catelog from './pages/Catelog';
 import CourseDetails from './pages/CourseDetails';
+import CourseAccess from './pages/Dashboard/CourseAccess';
+import VideoDetail from './components/core/ViewCourse/VideoDetail';
+import InstructorDashboard from './pages/Dashboard/InstructorDashboard';
 
 function App() {
   const dispatch = useDispatch();
@@ -36,9 +39,31 @@ function App() {
     const token = localStorage.getItem('token');
     if (!token) return true;
 
-    const payload = token.split('.')[1];
-    const decodedPayload = JSON.parse(atob(payload));
-    return decodedPayload.exp * 1000 < Date.now();
+    try {
+      const parts = token.split('.');
+
+      if (parts.length !== 3) {
+        console.error('Invalid JWT format - should have 3 parts');
+        return true;
+      }
+
+      const payload = parts[1];
+
+      const paddedPayload =
+        payload + '='.repeat((4 - (payload.length % 4)) % 4);
+
+      const decodedPayload = JSON.parse(atob(paddedPayload));
+
+      if (!decodedPayload.exp) {
+        console.error('Token does not have expiration time');
+        return true;
+      }
+
+      return decodedPayload.exp * 1000 < Date.now();
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true;
+    }
   }
 
   useEffect(() => {
@@ -113,9 +138,29 @@ function App() {
             <>
               <Route path="/dashboard/add-course" element={<AddCourses />} />
               <Route path="/dashboard/my-courses" element={<MyCourse />} />
+              <Route
+                path="/dashboard/instructor"
+                element={<InstructorDashboard />}
+              />
             </>
           )}
         </Route>
+
+        <Route
+          element={
+            <ProtectRoute>
+              <CourseAccess />
+            </ProtectRoute>
+          }
+        >
+          {user?.accountType === ACCOUNT_TYPE.STUDENT && (
+            <Route
+              path="/view-course/:courseId/section/:sectionId/sub-section/:subSectionId"
+              element={<VideoDetail />}
+            />
+          )}
+        </Route>
+
         <Route path="*" element={<Error />} />
       </Routes>
     </div>

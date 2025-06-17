@@ -8,8 +8,6 @@ import {
   addSubSection,
   updateSubSection,
 } from '../../../../../services/operations/SectionApi';
-import { setCourse } from '../../../../../slices/courseSlice';
-import { toast } from 'react-hot-toast';
 
 function SectionModal({ text, defaultValues, handleCancel }) {
   const {
@@ -96,6 +94,7 @@ function SectionModal({ text, defaultValues, handleCancel }) {
       if (defaultValues?.mode === 'edit') {
         const formdata = new FormData();
         formdata.append('subsectionId', defaultValues?.subSection._id);
+        formdata.append('sectionId', defaultValues?.sectionId);
         formdata.append('courseId', defaultValues?.courseId);
         formdata.append('title', data.title);
         formdata.append('timeDuration', timeDuration);
